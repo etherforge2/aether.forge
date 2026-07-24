@@ -1,3 +1,5 @@
+import { supabase } from "./supabaseClient";
+
 import { useState, useEffect, useRef, useCallback } from "react";
 
 const BRAND = { name: "AetherForge", tagline: "Institutional-Grade Trading Returns for Everyone", since: "2019" };
@@ -210,10 +212,44 @@ function AuthModal({ mode, onClose, onSuccess }) {
   const isMobile = useIsMobile();
 
   const handle = async () => {
-    if (!form.email || !form.password) { setErr("Please fill required fields."); return; }
-    setLoading(true); await new Promise(r => setTimeout(r, 1200)); setLoading(false);
-    onSuccess({ name: form.name || form.email.split("@")[0], email: form.email, balance: 0 });
-  };
+  if (!form.email || !form.password) { 
+    setErr("Please fill required fields."); 
+    return; 
+  }
+  setLoading(true); 
+  setErr("");
+
+  try {
+    if (tab === "login") {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: form.email,
+        password: form.password,
+      });
+      if (error) throw error;
+
+      const { data: profile } = await supabase.from('profiles').select('*').eq('id', data.user.id).single();
+
+      onSuccess({
+        id: data.user.id,
+        name: profile?.name || form.email.split("@")[0],
+        balance: profile?.balance || 0
+      });
+    } else {
+      const { error } = await supabase.auth.signUp({
+        email: form.email,
+        password: form.password,
+        options: { data: { name: form.name } }
+      });
+      if (error) throw error;
+      alert("Account created! You can now login.");
+      setTab("login");
+    }
+  } catch (error) {
+    setErr(error.message || "Something went wrong");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 1000, display: "flex", alignItems: isMobile ? "flex-end" : "center", justifyContent: "center", background: "rgba(8,12,24,0.85)", backdropFilter: "blur(8px)" }}>
@@ -986,12 +1022,54 @@ export default function App() {
   const prices = usePrices();
   const isMobile = useIsMobile();
 
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) loadUserProfile(session.user.id);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (session) {
+        loadUserProfile(session.user.id);
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const loadUserProfile = async (userId) => {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single();
+
+    if (profile) {
+      setUser(profile);
+    }
+  };
+
   const nav = useCallback((p) => {
-    if (p === "dashboard" && !user) { setShowAuth("login"); return; }
-    setPage(p); window.scrollTo({ top: 0, behavior: "smooth" });
+    if (p === "dashboard" && !user) {
+      setShowAuth("login");
+      return;
+    }
+    setPage(p);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [user]);
 
-  const onAuth = (u) => { setUser(u); setShowAuth(null); setPage("dashboard"); };
+  const onAuth = (u) => {
+    setUser(u);
+    setShowAuth(null);
+    setPage("dashboard");
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+    setPage("home");
+  };
 
   const renderPage = () => {
     switch (page) {
@@ -1019,12 +1097,11 @@ export default function App() {
         table tr:hover{background:rgba(255,255,255,.02)}
       `}</style>
 
-      <Nav page={page} setPage={nav} user={user} setUser={setUser} setShowAuth={setShowAuth} />
+      <Nav page={page} setPage={nav} user={user} setUser={handleLogout} setShowAuth={setShowAuth} />
       <LiveTicker prices={prices} />
       <main style={{ minHeight: "80vh" }}>{renderPage()}</main>
       <Footer setPage={nav} />
 
-      {/* Mobile sticky CTA */}
       {isMobile && !user && (
         <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 50, background: "rgba(8,12,24,0.97)", backdropFilter: "blur(12px)", borderTop: "1px solid rgba(0,212,170,0.15)", padding: "10px 16px", display: "flex", gap: 10 }}>
           <button onClick={() => setShowAuth("login")} style={{ ...S.outlineBtn, flex: 1, padding: "12px 0", fontSize: 14 }}>Login</button>
