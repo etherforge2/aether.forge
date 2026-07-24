@@ -167,7 +167,7 @@ function Nav({ page, setPage, user, setUser, setShowAuth }) {
           {!isMobile && (user ? (
             <>
               <div style={{ width: 34, height: 34, borderRadius: "50%", background: `linear-gradient(135deg,${PALETTE.teal},#006B55)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: "#fff" }}>{user.name?.[0] ?? "U"}</div>
-              <button onClick={() => setUser(null)} style={{ ...S.outlineBtn, padding: "7px 14px", fontSize: 13 }}>Logout</button>
+             <button onClick={() => setUser()} style={{ ...S.outlineBtn, padding: "7px 14px", fontSize: 13 }}>Logout</button>
             </>
           ) : (
             <>
