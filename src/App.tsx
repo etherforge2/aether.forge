@@ -575,51 +575,30 @@ function DashboardPage({ user, setPage, setShowAuth }) {
       </div>
 
       {tab === "overview" && (
-        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 20 }}>
-          {/* Active Plans */}
-          <div style={{ ...S.glassCard, padding: 22 }}>
-            <div style={{ fontWeight: 700, marginBottom: 18, fontSize: 15 }}>Active Plans</div>
-            {[
-              { name: "Gold Plan", invested: 900, daily: 3.8, progress: 60, remaining: 2 },
-              { name: "Platinum Plan", invested: 11580, daily: 5.2, progress: 35, remaining: 5 },
-            ].map((p, i) => (
-              <div key={i} style={{ background: "rgba(0,0,0,0.3)", borderRadius: 12, padding: 16, marginBottom: 12 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-                  <span style={{ fontWeight: 700, fontSize: 14 }}>{p.name}</span>
-                  <span style={{ color: PALETTE.teal, fontSize: 13 }}>{p.daily}%/day</span>
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: PALETTE.textMuted, marginBottom: 10 }}>
-                  <span>{fmtUSD(p.invested)}</span><span>{p.remaining} days left</span>
-                </div>
-                <div style={{ height: 4, background: "rgba(255,255,255,0.08)", borderRadius: 2, overflow: "hidden" }}>
-                  <div style={{ width: `${p.progress}%`, height: "100%", background: `linear-gradient(90deg,${PALETTE.teal},${PALETTE.gold})` }} />
-                </div>
-              </div>
-            ))}
-          </div>
-          {/* Transactions */}
-          <div style={{ ...S.glassCard, padding: 22 }}>
-            <div style={{ fontWeight: 700, marginBottom: 18, fontSize: 15 }}>Recent Transactions</div>
-            {[
-              { type: "Deposit", amt: 900, date: "Jun 18", icon: "↓", pos: true },
-              { type: "Profit Credit", amt: 34.20, date: "Jun 19", icon: "+", pos: true },
-              { type: "Deposit", amt: 11580, date: "Jun 15", icon: "↓", pos: true },
-              { type: "Withdrawal", amt: 2200, date: "Jun 10", icon: "↑", pos: false },
-            ].map((tx, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, paddingBottom: 14, borderBottom: i < 3 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
-                <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-                  <div style={{ width: 34, height: 34, borderRadius: 9, background: tx.pos ? "rgba(72,187,120,0.12)" : "rgba(245,101,101,0.12)", display: "flex", alignItems: "center", justifyContent: "center", color: tx.pos ? PALETTE.success : PALETTE.danger, fontWeight: 700 }}>{tx.icon}</div>
-                  <div>
-                    <div style={{ fontWeight: 600, fontSize: 13 }}>{tx.type}</div>
-                    <div style={{ fontSize: 11, color: PALETTE.textMuted }}>{tx.date}</div>
-                  </div>
-                </div>
-                <div style={{ color: tx.pos ? PALETTE.success : PALETTE.danger, fontWeight: 700, fontSize: 14 }}>{tx.pos ? "+" : "-"}{fmtUSD(tx.amt)}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+  <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 20 }}>
+    {/* Active Plans */}
+    <div style={{ ...S.glassCard, padding: 22 }}>
+      <div style={{ fontWeight: 700, marginBottom: 18, fontSize: 15 }}>Active Plans</div>
+      <div style={{ color: PALETTE.textMuted, fontSize: 14, textAlign: "center", padding: "30px 0" }}>
+        No active investments yet.<br />
+        <button 
+          onClick={() => setPage("plans")} 
+          style={{ ...S.tealBtn, marginTop: 16, padding: "10px 20px", fontSize: 13 }}
+        >
+          Start Investing
+        </button>
+      </div>
+    </div>
+
+    {/* Transactions */}
+    <div style={{ ...S.glassCard, padding: 22 }}>
+      <div style={{ fontWeight: 700, marginBottom: 18, fontSize: 15 }}>Recent Transactions</div>
+      <div style={{ color: PALETTE.textMuted, fontSize: 14, textAlign: "center", padding: "30px 0" }}>
+        No transactions yet.
+      </div>
+    </div>
+  </div>
+)}
 
       {tab === "trades" && (
         isMobile ? (
