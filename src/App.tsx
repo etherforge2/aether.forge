@@ -761,6 +761,43 @@ function PaymentPage({ plan, user, setPage, setShowAuth }) {
   const [amount, setAmount] = useState(plan?.min ?? 500);
   const [copied, setCopied] = useState(false);
   const [done, setDone] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  const handlePaymentConfirm = async () => {
+    if (!user || !plan) return;
+
+    setSubmitting(true);
+
+    try {
+      // 1. Create investment
+      const { error: invError } = await supabase.from('investments').insert({
+        user_id: user.id,
+        plan_id: plan.id,
+        amount: amount,
+        daily_rate: plan.daily,
+        status: 'active',
+        end_date: new Date(Date.now() + plan.duration * 24 * 60 * 60 * 1000).toISOString()
+      });
+
+      if (invError) throw invError;
+
+      // 2. Create transaction
+      const { error: txError } = await supabase.from('transactions').insert({
+        user_id: user.id,
+        type: 'investment',
+        amount: amount,
+        description: `Investment in ${plan.name} plan`
+      });
+
+      if (txError) throw txError;
+
+      setDone(true);
+    } catch (error) {
+      alert("Error: " + (error.message || "Something went wrong"));
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const copyAddr = () => { navigator.clipboard.writeText(selected.addr).catch(() => {}); setCopied(true); setTimeout(() => setCopied(false), 2000); };
 
