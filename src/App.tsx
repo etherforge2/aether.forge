@@ -520,6 +520,36 @@ function MarketsPage({ prices }) {
 function DashboardPage({ user, setPage, setShowAuth }) {
   const isMobile = useIsMobile();
   const [tab, setTab] = useState("overview");
+  const [activeInvestments, setActiveInvestments] = useState([]);
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const loadData = async () => {
+      setLoading(true);
+
+      const { data: investments } = await supabase
+        .from('investments')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('status', 'active');
+
+      const { data: txs } = await supabase
+        .from('transactions')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(10);
+
+      setActiveInvestments(investments || []);
+      setTransactions(txs || []);
+      setLoading(false);
+    };
+
+    loadData();
+  }, [user]);
 
   if (!user) return (
     <div style={{ maxWidth: 480, margin: "80px auto", padding: "0 16px", textAlign: "center" }}>
