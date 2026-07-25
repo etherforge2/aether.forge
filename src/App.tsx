@@ -892,7 +892,13 @@ function PaymentPage({ plan, user, setPage, setShowAuth }) {
           <div style={{ background: "rgba(201,168,76,0.08)", border: "1px solid rgba(201,168,76,0.2)", borderRadius: 10, padding: 12, marginBottom: 18, fontSize: 12, color: PALETTE.gold, lineHeight: 1.6 }}>
             ⚠️ Only send {selected.sym} on {selected.network}. Other tokens may be lost.
           </div>
-          <button onClick={() => setDone(true)} style={{ ...S.tealBtn, width: "100%", padding: "14px 0", fontSize: 14 }}>I Have Sent the Payment →</button>
+       <button 
+  onClick={handlePaymentConfirm} 
+  disabled={submitting}
+  style={{ ...S.tealBtn, width: "100%", padding: "14px 0", fontSize: 14, opacity: submitting ? 0.7 : 1 }}
+>
+  {submitting ? "Processing..." : "I Have Sent the Payment →"}
+</button>
         </div>
       </div>
     </div>
