@@ -836,8 +836,9 @@ function DashboardPage({ user, setPage, setShowAuth }) {
   </div>
 );
 }
-
-
+   </div>
+  );
+}
 
 
 
