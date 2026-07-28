@@ -672,16 +672,15 @@ function DashboardPage({ user, setPage, setShowAuth }) {
     </div>
   </div>
 )}
-     {tab === "trades" && (
+   {tab === "trades" && (
   <div style={{ ...S.glassCard, padding: 40, textAlign: "center" }}>
     <div style={{ fontSize: 40, marginBottom: 16 }}>📊</div>
     <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>Trade History</div>
-    <div style={{ color: PALETTE.textMuted, fontSize: 14 }}>
+    <div style={{ color: PALETTE.textMuted, fontSize: 14, lineHeight: 1.6 }}>
       Individual trade history will appear here once the AI trading engine is fully connected.
     </div>
   </div>
 )}
-
 
    {tab === "withdraw" && (
   <div style={{ maxWidth: 500 }}>
