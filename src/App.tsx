@@ -827,21 +827,17 @@ function DashboardPage({ user, setPage, setShowAuth }) {
           <div style={{ fontSize: isMobile ? 18 : 22, fontWeight: 800, color: PALETTE.gold }}>$0.00</div>
           <div style={{ fontSize: 12, color: PALETTE.textMuted, marginTop: 4 }}>Earned</div>
         </div>
-        <div style={{ background: "rgba(0,0,0,0.3)", borderRadius: 10, padding: isMobile ? "14px 12px" : "18px 16px" }}>
+       <div style={{ background: "rgba(0,0,0,0.3)", borderRadius: 10, padding: isMobile ? "14px 12px" : "18px 16px" }}>
           <div style={{ fontSize: isMobile ? 18 : 22, fontWeight: 800, color: PALETTE.gold }}>$0.00</div>
           <div style={{ fontSize: 12, color: PALETTE.textMuted, marginTop: 4 }}>Pending</div>
         </div>
       </div>
     </div>
   </div>
-);
-}
-   </div>
+)}
+    </div>
   );
 }
-
-
-
 
 function PaymentPage({ plan, user, setPage, setShowAuth }) {
   const isMobile = useIsMobile();
