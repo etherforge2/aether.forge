@@ -667,46 +667,15 @@ function DashboardPage({ user, setPage, setShowAuth }) {
     </div>
   </div>
 )}
-      {tab === "trades" && (
-        isMobile ? (
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {LIVE_TRADES.map((t, i) => (
-              <div key={i} style={{ ...S.glassCard, padding: "14px 16px" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
-                  <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                    <span style={{ fontWeight: 700 }}>{t.asset}</span>
-                    <span style={{ background: t.type === "BUY" ? "rgba(72,187,120,0.15)" : "rgba(245,101,101,0.15)", color: t.type === "BUY" ? PALETTE.success : PALETTE.danger, borderRadius: 6, padding: "2px 8px", fontSize: 11, fontWeight: 700 }}>{t.type}</span>
-                  </div>
-                  <span style={{ color: PALETTE.success, fontWeight: 700 }}>+{fmtUSD(t.pnl)}</span>
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: PALETTE.textMuted }}>
-                  <span>{fmtUSD(t.entry)} → {fmtUSD(t.exit)}</span><span>{t.time}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div style={{ ...S.glassCard, overflow: "hidden" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
-              <thead><tr style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                {["Time","Asset","Type","Entry","Exit","P&L","Return"].map(h => <th key={h} style={{ padding: "13px 16px", textAlign: "left", fontSize: 11, color: PALETTE.textMuted, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase" }}>{h}</th>)}
-              </tr></thead>
-              <tbody>{LIVE_TRADES.map((t, i) => (
-                <tr key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-                  <td style={{ padding: "12px 16px", fontSize: 12, fontFamily: "monospace", color: PALETTE.textMuted }}>{t.time}</td>
-                  <td style={{ padding: "12px 16px", fontWeight: 700 }}>{t.asset}</td>
-                  <td style={{ padding: "12px 16px" }}><span style={{ background: t.type==="BUY"?"rgba(72,187,120,0.15)":"rgba(245,101,101,0.15)", color: t.type==="BUY"?PALETTE.success:PALETTE.danger, borderRadius: 6, padding: "3px 10px", fontSize: 12, fontWeight: 700 }}>{t.type}</span></td>
-                  <td style={{ padding: "12px 16px", fontSize: 13 }}>{fmtUSD(t.entry)}</td>
-                  <td style={{ padding: "12px 16px", fontSize: 13 }}>{fmtUSD(t.exit)}</td>
-                  <td style={{ padding: "12px 16px", color: PALETTE.success, fontWeight: 700 }}>+{fmtUSD(t.pnl)}</td>
-                  <td style={{ padding: "12px 16px", color: PALETTE.success }}>+{t.pct}%</td>
-                </tr>
-              ))}</tbody>
-            </table>
-          </div>
-        )
-      )}
-
+     {tab === "trades" && (
+  <div style={{ ...S.glassCard, padding: 40, textAlign: "center" }}>
+    <div style={{ fontSize: 40, marginBottom: 16 }}>📊</div>
+    <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>Trade History</div>
+    <div style={{ color: PALETTE.textMuted, fontSize: 14 }}>
+      Individual trade history will appear here once the AI trading engine is fully connected.
+    </div>
+  </div>
+)}
 
 
    {tab === "withdraw" && (
