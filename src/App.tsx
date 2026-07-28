@@ -584,7 +584,7 @@ function DashboardPage({ user, setPage, setShowAuth }) {
   {[
     { label: "Total Balance", val: fmtUSD(user?.balance || 0), color: PALETTE.teal, icon: "💰" },
     { label: "Total Profit", val: fmtUSD(0), color: PALETTE.success, icon: "📈" },
-    { label: "Active Plans", val: "0", color: PALETTE.gold, icon: "⚡" },
+    { label: "Active Plans", val: activeInvestments.length.toString(), color: PALETTE.gold, icon: "⚡" },
     { label: "Withdrawn", val: fmtUSD(0), color: PALETTE.textMuted, icon: "🏦" },
   ].map((c, i) => (
     <div key={i} style={{ ...S.glassCard, padding: isMobile ? "14px 14px" : "18px 20px" }}>
