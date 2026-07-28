@@ -793,31 +793,53 @@ function DashboardPage({ user, setPage, setShowAuth }) {
 
 
       {tab === "referral" && (
-        <div style={{ maxWidth: 620 }}>
-          <div style={{ ...S.glassCard, padding: isMobile ? 20 : 28 }}>
-            <div style={{ fontWeight: 700, fontSize: 17, marginBottom: 6 }}>Referral Dashboard</div>
-            <div style={{ color: PALETTE.textMuted, fontSize: 13, marginBottom: 24 }}>Earn 5% commission on every investment your referrals make.</div>
-            <div style={{ background: "rgba(0,0,0,0.4)", borderRadius: 12, padding: "14px 16px", display: "flex", alignItems: "center", gap: 12, marginBottom: 24, flexWrap: "wrap" }}>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 11, color: PALETTE.textMuted, marginBottom: 3 }}>Your Referral Link</div>
-                <div style={{ fontFamily: "monospace", fontSize: 12, color: PALETTE.teal, wordBreak: "break-all" }}>https://aetherforge.io/ref/AF-{user.name?.slice(0,4)?.toUpperCase()}</div>
-              </div>
-              <button style={{ ...S.tealBtn, padding: "9px 16px", fontSize: 12, flexShrink: 0 }}>Copy</button>
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
-              {[["7", "Total Referrals"], ["$348.50", "Earned"], ["$82.00", "Pending"]].map(([v, l]) => (
-                <div key={l} style={{ background: "rgba(0,0,0,0.3)", borderRadius: 10, padding: isMobile ? "14px 12px" : "18px 16px" }}>
-                  <div style={{ fontSize: isMobile ? 18 : 22, fontWeight: 800, color: PALETTE.gold }}>{v}</div>
-                  <div style={{ fontSize: 12, color: PALETTE.textMuted, marginTop: 4 }}>{l}</div>
-                </div>
-              ))}
-            </div>
+  <div style={{ maxWidth: 620 }}>
+    <div style={{ ...S.glassCard, padding: isMobile ? 20 : 28 }}>
+      <div style={{ fontWeight: 700, fontSize: 17, marginBottom: 6 }}>Referral Dashboard</div>
+      <div style={{ color: PALETTE.textMuted, fontSize: 13, marginBottom: 24 }}>
+        Earn 5% commission on every investment your referrals make.
+      </div>
+
+      <div style={{ background: "rgba(0,0,0,0.4)", borderRadius: 12, padding: "14px 16px", display: "flex", alignItems: "center", gap: 12, marginBottom: 24, flexWrap: "wrap" }}>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 11, color: PALETTE.textMuted, marginBottom: 3 }}>Your Referral Link</div>
+          <div style={{ fontFamily: "monospace", fontSize: 12, color: PALETTE.teal, wordBreak: "break-all" }}>
+            https://aetherforge.io/ref/{user?.id?.slice(0, 8) || "AF"}
           </div>
         </div>
-      )}
+        <button 
+          style={{ ...S.tealBtn, padding: "9px 16px", fontSize: 12, flexShrink: 0 }}
+          onClick={() => {
+            navigator.clipboard.writeText(`https://aetherforge.io/ref/${user?.id?.slice(0, 8) || "AF"}`);
+            alert("Referral link copied!");
+          }}
+        >
+          Copy
+        </button>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+        <div style={{ background: "rgba(0,0,0,0.3)", borderRadius: 10, padding: isMobile ? "14px 12px" : "18px 16px" }}>
+          <div style={{ fontSize: isMobile ? 18 : 22, fontWeight: 800, color: PALETTE.gold }}>0</div>
+          <div style={{ fontSize: 12, color: PALETTE.textMuted, marginTop: 4 }}>Total Referrals</div>
+        </div>
+        <div style={{ background: "rgba(0,0,0,0.3)", borderRadius: 10, padding: isMobile ? "14px 12px" : "18px 16px" }}>
+          <div style={{ fontSize: isMobile ? 18 : 22, fontWeight: 800, color: PALETTE.gold }}>$0.00</div>
+          <div style={{ fontSize: 12, color: PALETTE.textMuted, marginTop: 4 }}>Earned</div>
+        </div>
+        <div style={{ background: "rgba(0,0,0,0.3)", borderRadius: 10, padding: isMobile ? "14px 12px" : "18px 16px" }}>
+          <div style={{ fontSize: isMobile ? 18 : 22, fontWeight: 800, color: PALETTE.gold }}>$0.00</div>
+          <div style={{ fontSize: 12, color: PALETTE.textMuted, marginTop: 4 }}>Pending</div>
+        </div>
+      </div>
     </div>
-  );
-}
+  </div>
+)}
+
+
+
+
+
 
 function PaymentPage({ plan, user, setPage, setShowAuth }) {
   const isMobile = useIsMobile();
