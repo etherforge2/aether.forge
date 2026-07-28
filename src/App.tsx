@@ -575,7 +575,12 @@ function DashboardPage({ user, setPage, setShowAuth }) {
         </div>
         <div style={{ display: "flex", gap: 10 }}>
           <button onClick={() => setPage("plans")} style={{ ...S.tealBtn, padding: isMobile ? "10px 16px" : "11px 20px", fontSize: 13 }}>+ Invest</button>
-          <button style={{ ...S.outlineBtn, padding: isMobile ? "10px 16px" : "11px 20px", fontSize: 13 }}>Withdraw</button>
+          <button 
+  onClick={() => setTab("withdraw")} 
+  style={{ ...S.outlineBtn, padding: isMobile ? "10px 16px" : "11px 20px", fontSize: 13 }}
+>
+  Withdraw
+</button>
         </div>
       </div>
 
