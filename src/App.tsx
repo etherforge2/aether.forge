@@ -707,26 +707,90 @@ function DashboardPage({ user, setPage, setShowAuth }) {
         )
       )}
 
-      {tab === "withdraw" && (
-        <div style={{ maxWidth: 500 }}>
-          <div style={{ ...S.glassCard, padding: isMobile ? 20 : 30 }}>
-            <div style={{ fontWeight: 700, fontSize: 17, marginBottom: 20 }}>Request Withdrawal</div>
-            <div style={{ background: "rgba(0,212,170,0.06)", border: "1px solid rgba(0,212,170,0.15)", borderRadius: 10, padding: 16, marginBottom: 20 }}>
-              <div style={{ fontSize: 12, color: PALETTE.textMuted, marginBottom: 4 }}>Available Balance</div>
-              <div style={{ fontSize: 26, fontWeight: 800, color: PALETTE.teal }}>{fmtUSD(mockBalance)}</div>
-            </div>
-            {[["Amount (USD)", "number", "500"], ["Wallet Address", "text", "Your wallet address..."]].map(([l, t, p]) => (
-              <div key={l} style={{ marginBottom: 14 }}><label style={S.label}>{l}</label><input style={S.input} type={t} placeholder={p} defaultValue={t === "number" ? p : ""} /></div>
-            ))}
-            <div style={{ marginBottom: 20 }}>
-              <label style={S.label}>Payment Method</label>
-              <select style={{ ...S.input, appearance: "none" }}>{CRYPTO_WALLETS.map(w => <option key={w.id}>{w.sym} – {w.name}</option>)}</select>
-            </div>
-            <div style={{ background: "rgba(201,168,76,0.08)", border: "1px solid rgba(201,168,76,0.2)", borderRadius: 10, padding: 12, marginBottom: 18, fontSize: 12, color: PALETTE.gold, lineHeight: 1.6 }}>⏱ Processed within 12–24 hours. Minimum: $50.</div>
-            <button style={{ ...S.tealBtn, width: "100%", padding: "13px 0", fontSize: 14 }}>Submit Withdrawal Request</button>
-          </div>
+
+
+   {tab === "withdraw" && (
+  <div style={{ maxWidth: 500 }}>
+    <div style={{ ...S.glassCard, padding: isMobile ? 20 : 30 }}>
+      <div style={{ fontWeight: 700, fontSize: 17, marginBottom: 20 }}>Request Withdrawal</div>
+      
+      <div style={{ background: "rgba(0,212,170,0.06)", border: "1px solid rgba(0,212,170,0.15)", borderRadius: 10, padding: 16, marginBottom: 20 }}>
+        <div style={{ fontSize: 12, color: PALETTE.textMuted, marginBottom: 4 }}>Available Balance</div>
+        <div style={{ fontSize: 26, fontWeight: 800, color: PALETTE.teal }}>
+          {fmtUSD(user?.balance || 0)}
         </div>
-      )}
+      </div>
+
+      <div style={{ marginBottom: 14 }}>
+        <label style={S.label}>Amount (USD)</label>
+        <input style={S.input} type="number" placeholder="Minimum $50" id="withdraw-amount" />
+      </div>
+
+      <div style={{ marginBottom: 14 }}>
+        <label style={S.label}>Wallet Address</label>
+        <input style={S.input} type="text" placeholder="Your wallet address..." id="withdraw-address" />
+      </div>
+
+      <div style={{ marginBottom: 20 }}>
+        <label style={S.label}>Payment Method</label>
+        <select style={{ ...S.input, appearance: "none" }} id="withdraw-method">
+          {CRYPTO_WALLETS.map(w => (
+            <option key={w.id} value={w.sym}>{w.sym} – {w.name}</option>
+          ))}
+        </select>
+      </div>
+
+      <div style={{ background: "rgba(201,168,76,0.08)", border: "1px solid rgba(201,168,76,0.2)", borderRadius: 10, padding: 12, marginBottom: 18, fontSize: 12, color: PALETTE.gold, lineHeight: 1.6 }}>
+        ⏱ Processed within 12–24 hours. Minimum: $50.
+      </div>
+
+      <button 
+        style={{ ...S.tealBtn, width: "100%", padding: "13px 0", fontSize: 14 }}
+        onClick={async () => {
+          const amount = Number((document.getElementById('withdraw-amount') as any)?.value);
+          const address = (document.getElementById('withdraw-address') as any)?.value;
+          const method = (document.getElementById('withdraw-method') as any)?.value;
+
+          if (!amount || amount < 50) {
+            alert("Minimum withdrawal is $50");
+            return;
+          }
+          if (!address) {
+            alert("Please enter wallet address");
+            return;
+          }
+          if (amount > (user?.balance || 0)) {
+            alert("Insufficient balance");
+            return;
+          }
+
+          const { error } = await supabase.from('withdrawals').insert({
+            user_id: user.id,
+            amount: amount,
+            wallet_address: address,
+            network: method,
+            status: 'pending'
+          });
+
+          if (error) {
+            alert("Error: " + error.message);
+          } else {
+            await supabase.from('transactions').insert({
+              user_id: user.id,
+              type: 'withdrawal',
+              amount: -amount,
+              description: `Withdrawal request to ${method}`
+            });
+            alert("Withdrawal request submitted successfully!");
+          }
+        }}
+      >
+        Submit Withdrawal Request
+      </button>
+    </div>
+  </div>
+)}
+
 
       {tab === "referral" && (
         <div style={{ maxWidth: 620 }}>
