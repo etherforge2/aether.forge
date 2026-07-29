@@ -920,14 +920,14 @@ function PaymentPage({ plan, user, setPage, setShowAuth }) {
     try {
       // 1. Create investment
       const { error: invError } = await supabase.from('investments').insert({
-        user_id: user.id,
-        plan_id: plan.id,
-        amount: amount,
-        daily_rate: plan.daily,
-        status: 'active',
-        end_date: new Date(Date.now() + plan.duration * 24 * 60 * 60 * 1000).toISOString()
-      });
-
+  user_id: user.id,
+  plan_id: plan.id,
+  amount: amount,
+  daily_rate: plan.daily,
+  status: 'active',
+  start_date: new Date().toISOString(),   // ← ADD THIS LINE
+  end_date: new Date(Date.now() + plan.duration * 24 * 60 * 60 * 1000).toISOString()
+});
       if (invError) throw invError;
 
       // 2. Create transaction
