@@ -924,8 +924,8 @@ function PaymentPage({ plan, user, setPage, setShowAuth }) {
   plan_id: plan.id,
   amount: amount,
   daily_rate: plan.daily,
-  status: 'active',
-  start_date: new Date().toISOString(),   // ← ADD THIS LINE
+  status: 'pending',   // ← changed from 'active'
+  start_date: new Date().toISOString(),
   end_date: new Date(Date.now() + plan.duration * 24 * 60 * 60 * 1000).toISOString()
 });
       if (invError) throw invError;
