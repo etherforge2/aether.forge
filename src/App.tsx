@@ -966,7 +966,7 @@ function PaymentPage({ plan, user, setPage, setShowAuth }) {
       <div style={{ ...S.glassCard, padding: isMobile ? 28 : 44 }}>
         <div style={{ width: 68, height: 68, borderRadius: "50%", background: "rgba(72,187,120,0.15)", border: `2px solid ${PALETTE.success}`, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", fontSize: 30 }}>✓</div>
         <div style={{ fontSize: 22, fontWeight: 800, marginBottom: 10 }}>Payment Submitted</div>
-        <div style={{ color: PALETTE.textMuted, lineHeight: 1.7, marginBottom: 24, fontSize: 14 }}>Your {fmtUSD(amount)} investment in <strong style={{ color: PALETTE.teal }}>{plan.name}</strong> is pending confirmation. Email incoming within 30 minutes.</div>
+        <div style={{ color: PALETTE.textMuted, lineHeight: 1.7, marginBottom: 24, fontSize: 14 }}Your {fmtUSD(amount)} investment in <strong style={{ color: PALETTE.teal }}>{plan.name}</strong> is pending confirmation. It will appear in your Active Plans after approval.</div>
         <button onClick={() => setPage("dashboard")} style={{ ...S.tealBtn, padding: "13px 36px", fontSize: 15 }}>Go to Dashboard</button>
       </div>
     </div>
