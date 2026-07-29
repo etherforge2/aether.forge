@@ -563,8 +563,7 @@ function DashboardPage({ user, setPage, setShowAuth }) {
   );
 
   const tabs = ["overview", "trades", "withdraw", "referral"];
-  const mockBalance = 12480.50, mockProfit = 1842.30;
-
+  
   return (
     <div style={{ maxWidth: 1100, margin: "0 auto", padding: isMobile ? "24px 16px" : "40px 24px" }}>
       {/* Header */}
