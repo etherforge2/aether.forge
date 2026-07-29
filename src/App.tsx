@@ -597,11 +597,29 @@ const [withdrawals, setWithdrawals] = useState([]);
       {/* Balance cards */}
 <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4,1fr)", gap: 12, marginBottom: 24 }}>
   {[
-    { label: "Total Balance", val: fmtUSD(user?.balance || 0), color: PALETTE.teal, icon: "💰" },
-    { label: "Total Profit", val: fmtUSD(0), color: PALETTE.success, icon: "📈" },
-    { label: "Active Plans", val: activeInvestments.length.toString(), color: PALETTE.gold, icon: "⚡" },
-    { label: "Withdrawn", val: fmtUSD(0), color: PALETTE.textMuted, icon: "🏦" },
-  ].map((c, i) => (
+  { label: "Total Balance", val: fmtUSD(user?.balance || 0), color: PALETTE.teal, icon: "💰" },
+  { 
+    label: "Total Profit", 
+    val: fmtUSD(
+      (transactions || [])
+        .filter(t => t.type === "profit")
+        .reduce((sum, t) => sum + Number(t.amount || 0), 0)
+    ), 
+    color: PALETTE.success, 
+    icon: "📈" 
+  },
+  { label: "Active Plans", val: activeInvestments.length.toString(), color: PALETTE.gold, icon: "⚡" },
+  { 
+    label: "Withdrawn", 
+    val: fmtUSD(
+      (withdrawals || [])
+        .filter(w => w.status === "completed" || w.status === "approved")
+        .reduce((sum, w) => sum + Number(w.amount || 0), 0)
+    ), 
+    color: PALETTE.textMuted, 
+    icon: "🏦" 
+  },
+].map((c, i) => (
     <div key={i} style={{ ...S.glassCard, padding: isMobile ? "14px 14px" : "18px 20px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
         <span style={{ fontSize: 12, color: PALETTE.textMuted }}>{c.label}</span>
