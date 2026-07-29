@@ -628,18 +628,37 @@ function DashboardPage({ user, setPage, setShowAuth }) {
           </button>
         </div>
       ) : (
-        activeInvestments.map((inv) => (
-          <div key={inv.id} style={{ background: "rgba(0,0,0,0.3)", borderRadius: 12, padding: 16, marginBottom: 12 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-              <span style={{ fontWeight: 700, fontSize: 14 }}>{inv.plan_id?.toUpperCase()} Plan</span>
-              <span style={{ color: PALETTE.teal, fontSize: 13 }}>{inv.daily_rate}%/day</span>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: PALETTE.textMuted }}>
-              <span>{fmtUSD(inv.amount)}</span>
-              <span>{inv.status}</span>
-            </div>
-          </div>
-        ))
+        activeInvestments.map((inv) => {
+  const end = inv.end_date ? new Date(inv.end_date) : null;
+  const start = inv.created_at ? new Date(inv.created_at) : (end ? new Date(end.getTime() - 5 * 24 * 60 * 60 * 1000) : new Date());
+  const now = new Date();
+
+  let daysLeft = 0;
+  let progress = 0;
+
+  if (end) {
+    const totalMs = end.getTime() - start.getTime();
+    const leftMs = end.getTime() - now.getTime();
+    daysLeft = Math.max(0, Math.ceil(leftMs / (1000 * 60 * 60 * 24)));
+    progress = totalMs > 0 ? Math.min(100, Math.max(0, ((totalMs - leftMs) / totalMs) * 100)) : 0;
+  }
+
+  return (
+    <div key={inv.id} style={{ background: "rgba(0,0,0,0.3)", borderRadius: 12, padding: 16, marginBottom: 12 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+        <span style={{ fontWeight: 700, fontSize: 14 }}>{inv.plan_id?.toUpperCase()} Plan</span>
+        <span style={{ color: PALETTE.teal, fontSize: 13 }}>{inv.daily_rate}%/day</span>
+      </div>
+      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: PALETTE.textMuted, marginBottom: 10 }}>
+        <span>{fmtUSD(inv.amount)}</span>
+        <span>{daysLeft} days left</span>
+      </div>
+      <div style={{ height: 4, background: "rgba(255,255,255,0.08)", borderRadius: 2, overflow: "hidden" }}>
+        <div style={{ width: `\( {progress}%`, height: "100%", background: `linear-gradient(90deg, \){PALETTE.teal},${PALETTE.gold})` }} />
+      </div>
+    </div>
+  );
+})
       )}
     </div>
 
