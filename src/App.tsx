@@ -733,7 +733,7 @@ const [withdrawals, setWithdrawals] = useState([]);
   <div style={{ maxWidth: 500 }}>
     <div style={{ ...S.glassCard, padding: isMobile ? 20 : 30 }}>
       <div style={{ fontWeight: 700, fontSize: 17, marginBottom: 20 }}>Request Withdrawal</div>
-      
+
       <div style={{ background: "rgba(0,212,170,0.06)", border: "1px solid rgba(0,212,170,0.15)", borderRadius: 10, padding: 16, marginBottom: 20 }}>
         <div style={{ fontSize: 12, color: PALETTE.textMuted, marginBottom: 4 }}>Available Balance</div>
         <div style={{ fontSize: 26, fontWeight: 800, color: PALETTE.teal }}>
@@ -767,9 +767,9 @@ const [withdrawals, setWithdrawals] = useState([]);
       <button 
         style={{ ...S.tealBtn, width: "100%", padding: "13px 0", fontSize: 14 }}
         onClick={async () => {
-          const amount = Number((document.getElementById('withdraw-amount') as any)?.value);
-          const address = (document.getElementById('withdraw-address') as any)?.value;
-          const method = (document.getElementById('withdraw-method') as any)?.value;
+          const amount = Number(document.getElementById('withdraw-amount')?.value);
+          const address = document.getElementById('withdraw-address')?.value;
+          const method = document.getElementById('withdraw-method')?.value;
 
           if (!amount || amount < 50) {
             alert("Minimum withdrawal is $50");
@@ -802,15 +802,48 @@ const [withdrawals, setWithdrawals] = useState([]);
               description: `Withdrawal request to ${method}`
             });
             alert("Withdrawal request submitted successfully!");
+            // Reload data
+            window.location.reload();
           }
         }}
       >
         Submit Withdrawal Request
       </button>
     </div>
+
+    {/* Withdrawal History */}
+    <div style={{ ...S.glassCard, padding: isMobile ? 20 : 24, marginTop: 20 }}>
+      <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 16 }}>Withdrawal History</div>
+
+      {loading ? (
+        <div style={{ color: PALETTE.textMuted, textAlign: "center", padding: "20px 0" }}>Loading...</div>
+      ) : withdrawals.length === 0 ? (
+        <div style={{ color: PALETTE.textMuted, fontSize: 14, textAlign: "center", padding: "20px 0" }}>
+          No withdrawal requests yet.
+        </div>
+      ) : (
+        withdrawals.map((w) => (
+          <div key={w.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14, paddingBottom: 14, borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+            <div>
+              <div style={{ fontWeight: 600, fontSize: 14 }}>{fmtUSD(w.amount)}</div>
+              <div style={{ fontSize: 12, color: PALETTE.textMuted }}>
+                {w.network} · {new Date(w.created_at).toLocaleDateString()}
+              </div>
+            </div>
+            <div style={{ 
+              fontSize: 12, 
+              fontWeight: 700, 
+              color: w.status === "pending" ? PALETTE.gold : w.status === "completed" || w.status === "approved" ? PALETTE.success : PALETTE.danger,
+              textTransform: "capitalize"
+            }}>
+              {w.status}
+            </div>
+          </div>
+        ))
+      )}
+    </div>
   </div>
 )}
-
 
       {tab === "referral" && (
   <div style={{ maxWidth: 620 }}>
