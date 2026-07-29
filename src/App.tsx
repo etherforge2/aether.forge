@@ -657,19 +657,26 @@ const [withdrawals, setWithdrawals] = useState([]);
           </button>
         </div>
       ) : (
+
         activeInvestments.map((inv) => {
   const end = inv.end_date ? new Date(inv.end_date) : null;
-  const start = inv.created_at ? new Date(inv.created_at) : (end ? new Date(end.getTime() - 5 * 24 * 60 * 60 * 1000) : new Date());
+  const start = inv.start_date 
+    ? new Date(inv.start_date) 
+    : inv.created_at 
+      ? new Date(inv.created_at) 
+      : new Date();
+
   const now = new Date();
 
   let daysLeft = 0;
   let progress = 0;
 
   if (end) {
-    const totalMs = end.getTime() - start.getTime();
-    const leftMs = end.getTime() - now.getTime();
-    daysLeft = Math.max(0, Math.ceil(leftMs / (1000 * 60 * 60 * 24)));
-    progress = totalMs > 0 ? Math.min(100, Math.max(0, ((totalMs - leftMs) / totalMs) * 100)) : 0;
+    const totalDays = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
+    const leftDays = Math.max(0, Math.ceil((end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)));
+    
+    daysLeft = leftDays;
+    progress = Math.min(100, Math.max(0, ((totalDays - leftDays) / totalDays) * 100));
   }
 
   return (
@@ -680,10 +687,15 @@ const [withdrawals, setWithdrawals] = useState([]);
       </div>
       <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: PALETTE.textMuted, marginBottom: 10 }}>
         <span>{fmtUSD(inv.amount)}</span>
-        <span>{daysLeft} days left</span>
+        <span>{daysLeft} day{daysLeft !== 1 ? "s" : ""} left</span>
       </div>
       <div style={{ height: 4, background: "rgba(255,255,255,0.08)", borderRadius: 2, overflow: "hidden" }}>
-        <div style={{ width: `\( {progress}%`, height: "100%", background: `linear-gradient(90deg, \){PALETTE.teal},${PALETTE.gold})` }} />
+        <div style={{ 
+          width: `${progress}%`, 
+          height: "100%", 
+          background: `linear-gradient(90deg,\( {PALETTE.teal}, \){PALETTE.gold})`,
+          transition: "width 0.5s ease"
+        }} />
       </div>
     </div>
   );
