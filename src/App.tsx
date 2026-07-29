@@ -528,25 +528,35 @@ function DashboardPage({ user, setPage, setShowAuth }) {
     if (!user) return;
 
     const loadData = async () => {
-      setLoading(true);
+  setLoading(true);
 
-      const { data: investments } = await supabase
-        .from('investments')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('status', 'active');
+  // Investments
+  const { data: investments } = await supabase
+    .from('investments')
+    .select('*')
+    .eq('user_id', user.id)
+    .eq('status', 'active');
 
-      const { data: txs } = await supabase
-        .from('transactions')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(10);
+  // Transactions
+  const { data: txs } = await supabase
+    .from('transactions')
+    .select('*')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false })
+    .limit(20);
 
-      setActiveInvestments(investments || []);
-      setTransactions(txs || []);
-      setLoading(false);
-    };
+  // Withdrawals
+  const { data: withdrawals } = await supabase
+    .from('withdrawals')
+    .select('*')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false });
+
+  setActiveInvestments(investments || []);
+  setTransactions(txs || []);
+  setWithdrawals(withdrawals || []);
+  setLoading(false);
+};
 
     loadData();
   }, [user]);
