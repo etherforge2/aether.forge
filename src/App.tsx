@@ -562,6 +562,39 @@ const [withdrawals, setWithdrawals] = useState([]);
     loadData();
   }, [user]);
 
+   
+
+
+const calcProfit = () => {
+  let total = 0;
+  const now = new Date();
+
+  (activeInvestments || []).forEach((inv) => {
+    const start = inv.start_date
+      ? new Date(inv.start_date)
+      : inv.created_at
+      ? new Date(inv.created_at)
+      : null;
+    if (!start) return;
+
+    const days = Math.max(0, Math.floor((now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
+    const daily = Number(inv.daily_rate || 0);
+    const amount = Number(inv.amount || 0);
+    total += amount * (daily / 100) * days;
+  });
+
+  (transactions || []).forEach((t) => {
+    if (t.type === "profit") total += Number(t.amount || 0);
+  });
+
+  return total;
+};
+
+const totalProfit = calcProfit();
+
+
+
+
   if (!user) return (
     <div style={{ maxWidth: 480, margin: "80px auto", padding: "0 16px", textAlign: "center" }}>
       <div style={{ ...S.glassCard, padding: 40 }}>
