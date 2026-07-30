@@ -732,12 +732,44 @@ const [withdrawals, setWithdrawals] = useState([]);
   </div>
 )}
    {tab === "trades" && (
-  <div style={{ ...S.glassCard, padding: 40, textAlign: "center" }}>
-    <div style={{ fontSize: 40, marginBottom: 16 }}>📊</div>
-    <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>Trade History</div>
-    <div style={{ color: PALETTE.textMuted, fontSize: 14, lineHeight: 1.6 }}>
-      Individual trade history will appear here once the AI trading engine is fully connected.
-    </div>
+  <div style={{ ...S.glassCard, padding: isMobile ? 16 : 22 }}>
+    <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 16 }}>Activity</div>
+
+    {loading ? (
+      <div style={{ color: PALETTE.textMuted, textAlign: "center", padding: "24px 0" }}>Loading...</div>
+    ) : (transactions || []).length === 0 && (activeInvestments || []).length === 0 ? (
+      <div style={{ color: PALETTE.textMuted, textAlign: "center", padding: "30px 0", fontSize: 14 }}>
+        No trading activity yet.<br />Start an investment to see activity here.
+      </div>
+    ) : (
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        {(activeInvestments || []).map((inv) => (
+          <div key={`inv-${inv.id}`} style={{ background: "rgba(0,0,0,0.28)", borderRadius: 12, padding: 14 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+              <span style={{ fontWeight: 700 }}>{inv.plan_id?.toUpperCase()} Plan</span>
+              <span style={{ color: PALETTE.teal, fontWeight: 700 }}>{inv.daily_rate}%/day</span>
+            </div>
+            <div style={{ fontSize: 12, color: PALETTE.textMuted }}>
+              Active investment · {fmtUSD(inv.amount)}
+            </div>
+          </div>
+        ))}
+
+        {(transactions || []).map((tx) => (
+          <div key={tx.id} style={{ display: "flex", justifyContent: "space-between", paddingBottom: 12, borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+            <div>
+              <div style={{ fontWeight: 600, fontSize: 13 }}>{tx.type}</div>
+              <div style={{ fontSize: 11, color: PALETTE.textMuted }}>
+                {tx.created_at ? new Date(tx.created_at).toLocaleString() : ""}
+              </div>
+            </div>
+            <div style={{ fontWeight: 700, color: Number(tx.amount) >= 0 ? PALETTE.success : PALETTE.danger }}>
+              {Number(tx.amount) >= 0 ? "+" : ""}{fmtUSD(tx.amount)}
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
   </div>
 )}
 
