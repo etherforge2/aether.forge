@@ -664,6 +664,49 @@ const totalProfit = calcProfit();
       {tab === "overview" && (
   <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 20 }}>
     
+
+
+
+{/* Pending Plans */}
+<div style={{ ...S.glassCard, padding: 22, gridColumn: isMobile ? "auto" : "1 / -1" }}>
+  <div style={{ fontWeight: 700, marginBottom: 18, fontSize: 15 }}>Pending Confirmation</div>
+
+  {loading ? (
+    <div style={{ color: PALETTE.textMuted, textAlign: "center", padding: "16px 0" }}>Loading...</div>
+  ) : pendingInvestments.length === 0 ? (
+    <div style={{ color: PALETTE.textMuted, fontSize: 14, textAlign: "center", padding: "16px 0" }}>
+      No pending investments.
+    </div>
+  ) : (
+    pendingInvestments.map((inv) => (
+      <div
+        key={inv.id}
+        style={{
+          background: "rgba(201,168,76,0.08)",
+          border: "1px solid rgba(201,168,76,0.2)",
+          borderRadius: 12,
+          padding: 16,
+          marginBottom: 12
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+          <span style={{ fontWeight: 700, fontSize: 14 }}>{inv.plan_id?.toUpperCase()} Plan</span>
+          <span style={{ color: PALETTE.gold, fontSize: 12, fontWeight: 700 }}>PENDING</span>
+        </div>
+        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: PALETTE.textMuted }}>
+          <span>{fmtUSD(inv.amount)}</span>
+          <span>{inv.daily_rate}%/day</span>
+        </div>
+        <div style={{ marginTop: 8, fontSize: 12, color: PALETTE.gold }}>
+          Waiting for payment confirmation
+        </div>
+      </div>
+    ))
+  )}
+</div>
+
+
+
     {/* Active Plans */}
     <div style={{ ...S.glassCard, padding: 22 }}>
       <div style={{ fontWeight: 700, marginBottom: 18, fontSize: 15 }}>Active Plans</div>
