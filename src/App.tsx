@@ -532,14 +532,12 @@ const [withdrawals, setWithdrawals] = useState([]);
     const loadData = async () => {
   setLoading(true);
 
-  // Investments
   const { data: investments } = await supabase
     .from('investments')
     .select('*')
     .eq('user_id', user.id)
-    .eq('status', 'active');
+    .in('status', ['active', 'pending']);
 
-  // Transactions
   const { data: txs } = await supabase
     .from('transactions')
     .select('*')
@@ -547,18 +545,17 @@ const [withdrawals, setWithdrawals] = useState([]);
     .order('created_at', { ascending: false })
     .limit(20);
 
-  // Withdrawals
-  const { data: investments } = await supabase
-  .from('investments')
-  .select('*')
-  .eq('user_id', user.id)
-  .in('status', ['active', 'pending']);
+  const { data: wd } = await supabase
+    .from('withdrawals')
+    .select('*')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false });
 
-const all = investments || [];
-setActiveInvestments(all.filter((i) => i.status === 'active'));
-setPendingInvestments(all.filter((i) => i.status === 'pending'));
+  const all = investments || [];
+  setActiveInvestments(all.filter((i) => i.status === 'active'));
+  setPendingInvestments(all.filter((i) => i.status === 'pending'));
   setTransactions(txs || []);
-  setWithdrawals(withdrawals || []);
+  setWithdrawals(wd || []);
   setLoading(false);
 };
 
