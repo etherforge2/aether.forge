@@ -522,6 +522,7 @@ function DashboardPage({ user, setPage, setShowAuth }) {
   const [tab, setTab] = useState("overview");
   const [activeInvestments, setActiveInvestments] = useState([]);
   const [transactions, setTransactions] = useState([]);
+const [pendingInvestments, setPendingInvestments] = useState([]);
   const [loading, setLoading] = useState(true);
 const [withdrawals, setWithdrawals] = useState([]);
 
