@@ -548,13 +548,15 @@ const [withdrawals, setWithdrawals] = useState([]);
     .limit(20);
 
   // Withdrawals
-  const { data: withdrawals } = await supabase
-    .from('withdrawals')
-    .select('*')
-    .eq('user_id', user.id)
-    .order('created_at', { ascending: false });
+  const { data: investments } = await supabase
+  .from('investments')
+  .select('*')
+  .eq('user_id', user.id)
+  .in('status', ['active', 'pending']);
 
-  setActiveInvestments(investments || []);
+const all = investments || [];
+setActiveInvestments(all.filter((i) => i.status === 'active'));
+setPendingInvestments(all.filter((i) => i.status === 'pending'));
   setTransactions(txs || []);
   setWithdrawals(withdrawals || []);
   setLoading(false);
