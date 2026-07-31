@@ -631,16 +631,7 @@ const totalProfit = calcProfit();
 <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4,1fr)", gap: 12, marginBottom: 24 }}>
   {[
   { label: "Total Balance", val: fmtUSD(user?.balance || 0), color: PALETTE.teal, icon: "💰" },
-  { 
-    label: "Total Profit", 
-    val: fmtUSD(
-      (transactions || [])
-        .filter(t => t.type === "profit")
-        .reduce((sum, t) => sum + Number(t.amount || 0), 0)
-    ), 
-    color: PALETTE.success, 
-    icon: "📈" 
-  },
+  { label: "Total Profit", val: fmtUSD(totalProfit), color: PALETTE.success, icon: "📈" },
   { label: "Active Plans", val: activeInvestments.length.toString(), color: PALETTE.gold, icon: "⚡" },
   { 
     label: "Withdrawn", 
