@@ -1036,9 +1036,12 @@ function PaymentPage({ plan, user, setPage, setShowAuth }) {
       const { error: invError } = await supabase.from('investments').insert({
   user_id: user.id,
   plan_id: plan.id,
+  plan_name: plan.name,
   amount: amount,
   daily_rate: plan.daily,
-  status: 'pending',   // ← changed from 'active'
+  duration_days: plan.duration,
+  payment_method: selected.sym,
+  status: 'pending',
   start_date: new Date().toISOString(),
   end_date: new Date(Date.now() + plan.duration * 24 * 60 * 60 * 1000).toISOString()
 });
