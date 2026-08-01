@@ -768,14 +768,17 @@ const totalProfit = calcProfit();
         <span>{fmtUSD(inv.amount)}</span>
         <span>{daysLeft} day{daysLeft !== 1 ? "s" : ""} left</span>
       </div>
-      <div style={{ height: 4, background: "rgba(255,255,255,0.08)", borderRadius: 2, overflow: "hidden" }}>
-        <div style={{ 
-          width: `${progress}%`, 
-          height: "100%", 
-          background: `linear-gradient(90deg, ${PALETTE.teal}, ${PALETTE.gold})`,
-          transition: "width 0.5s ease"
-        }} />
-      </div>
+    <div style={{ height: 6, background: "rgba(255,255,255,0.10)", borderRadius: 4, overflow: "hidden" }}>
+  <div style={{
+    width: `${Math.max(progress, 2)}%`,
+    height: "100%",
+    background: `linear-gradient(90deg, ${PALETTE.teal}, ${PALETTE.gold})`,
+    transition: "width 0.5s ease"
+  }} />
+</div>
+<div style={{ marginTop: 6, fontSize: 11, color: PALETTE.textMuted }}>
+  {Math.round(progress)}% complete
+</div>
     </div>
   );
 })
