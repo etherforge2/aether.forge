@@ -760,7 +760,7 @@ const totalProfit = calcProfit();
         <div style={{ 
           width: `${progress}%`, 
           height: "100%", 
-          background: `linear-gradient(90deg,\( {PALETTE.teal}, \){PALETTE.gold})`,
+          background: `linear-gradient(90deg, ${PALETTE.teal}, ${PALETTE.gold})`,
           transition: "width 0.5s ease"
         }} />
       </div>
