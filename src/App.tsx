@@ -1255,7 +1255,7 @@ function ContactPage() {
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 20 }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {[
-            { icon: "📧", label: "Email", val: "support@aetherforge.io", note: "Response within 2 hours" },
+            { icon: "📧", label: "Email", val: "support@aetherforgehq.com", note: "Response within 2 hours" },
             { icon: "💬", label: "Live Chat", val: "Available on website", note: "Wait < 3 minutes" },
             { icon: "📞", label: "Phone (UK)", val: "+44 20 7946 0834", note: "Mon–Fri 8am–8pm GMT" },
             { icon: "🏢", label: "HQ", val: "22 Bishopsgate, London EC2N 4BQ", note: "By appointment" },
