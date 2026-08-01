@@ -552,11 +552,23 @@ const [withdrawals, setWithdrawals] = useState([]);
     .order('created_at', { ascending: false });
 
   const all = investments || [];
-  setActiveInvestments(all.filter((i) => i.status === 'active'));
-  setPendingInvestments(all.filter((i) => i.status === 'pending'));
-  setTransactions(txs || []);
-  setWithdrawals(wd || []);
-  setLoading(false);
+setActiveInvestments(all.filter((i) => i.status === 'active'));
+setPendingInvestments(all.filter((i) => i.status === 'pending'));
+setTransactions(txs || []);
+setWithdrawals(wd || []);
+
+// Refresh balance from profiles
+const { data: profile } = await supabase
+  .from('profiles')
+  .select('*')
+  .eq('id', user.id)
+  .single();
+
+if (profile && typeof user === 'object') {
+  user.balance = profile.balance;
+}
+
+setLoading(false);
 };
 
     loadData();
