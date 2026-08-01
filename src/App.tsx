@@ -1033,20 +1033,32 @@ function PaymentPage({ plan, user, setPage, setShowAuth }) {
 
     try {
       // 1. Create investment
-      const { error: invError } = await supabase.from('investments').insert({
-  user_id: user.id,
-  plan_id: plan.id,
-  plan_name: plan.name,
-  amount: amount,
-  daily_rate: plan.daily,
-  duration_days: plan.duration,
-  payment_method: selected.sym,
-  status: 'pending',
-  start_date: new Date().toISOString(),
-  end_date: new Date(Date.now() + plan.duration * 24 * 60 * 60 * 1000).toISOString()
-});
-      if (invError) throw invError;
+      const { data: invData, error: invError } = await supabase
+  .from('investments')
+  .insert({
+    user_id: user.id,
+    plan_id: plan.id,
+    plan_name: plan.name,
+    amount: amount,
+    daily_rate: plan.daily,
+    duration_days: plan.duration,
+    payment_method: selected.sym,
+    status: 'pending',
+    start_date: new Date().toISOString(),
+    end_date: new Date(Date.now() + plan.duration * 24 * 60 * 60 * 1000).toISOString()
+  })
+  .select()
+  .single();
 
+if (invError) {
+  alert("Investment error: " + invError.message);
+  throw invError;
+}
+
+if (!invData) {
+  alert("Investment not saved");
+  throw new Error("No investment row returned");
+}
       // 2. Create transaction
       const { error: txError } = await supabase.from('transactions').insert({
         user_id: user.id,
