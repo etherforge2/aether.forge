@@ -763,11 +763,24 @@ const totalProfit = calcProfit();
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
         <span style={{ fontWeight: 700, fontSize: 14 }}>{inv.plan_id?.toUpperCase()} Plan</span>
         <span style={{ color: PALETTE.teal, fontSize: 13 }}>{inv.daily_rate}%/day</span>
-      </div>
-      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: PALETTE.textMuted, marginBottom: 10 }}>
-        <span>{fmtUSD(inv.amount)}</span>
-        <span>{daysLeft} day{daysLeft !== 1 ? "s" : ""} left</span>
-      </div>
+      </div> 
+
+
+     <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: PALETTE.textMuted, marginBottom: 6 }}>
+  <span>{fmtUSD(inv.amount)}</span>
+  <span>{daysLeft} day{daysLeft !== 1 ? "s" : ""} left</span>
+</div>
+<div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, marginBottom: 10 }}>
+  <span style={{ color: PALETTE.textMuted }}>Earned so far</span>
+  <span style={{ color: PALETTE.success, fontWeight: 700 }}>
+    {fmtUSD(
+      Number(inv.amount || 0) *
+      (Number(inv.daily_rate || 0) / 100) *
+      Math.max(0, Math.floor((now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)))
+    )}
+  </span>
+</div>
+
     <div style={{ height: 6, background: "rgba(255,255,255,0.10)", borderRadius: 4, overflow: "hidden" }}>
   <div style={{
     width: `${Math.max(progress, 2)}%`,
