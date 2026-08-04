@@ -525,6 +525,7 @@ function DashboardPage({ user, setUser, setPage, setShowAuth }) {
 const [pendingInvestments, setPendingInvestments] = useState([]);
   const [loading, setLoading] = useState(true);
 const [withdrawals, setWithdrawals] = useState([]);
+const [completedInvestments, setCompletedInvestments] = useState([]);
 
   useEffect(() => {
     if (!user) return;
