@@ -517,7 +517,7 @@ function MarketsPage({ prices }) {
   );
 }
 
-function DashboardPage({ user, setPage, setShowAuth }) {
+function DashboardPage({ user, setUser, setPage, setShowAuth }) {
   const isMobile = useIsMobile();
   const [tab, setTab] = useState("overview");
   const [activeInvestments, setActiveInvestments] = useState([]);
