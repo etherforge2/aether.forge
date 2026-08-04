@@ -552,8 +552,29 @@ const [withdrawals, setWithdrawals] = useState([]);
     .order('created_at', { ascending: false });
 
   const all = investments || [];
-setActiveInvestments(all.filter((i) => i.status === 'active'));
+const nowTs = new Date();
+
+const active = [];
+const completed = [];
+
+(all || []).forEach((i) => {
+  if (i.status === 'pending') return;
+
+  if (i.status === 'active') {
+    const end = i.end_date ? new Date(i.end_date) : null;
+    if (end && end.getTime() < nowTs.getTime()) {
+      completed.push({ ...i, status: 'completed' });
+    } else {
+      active.push(i);
+    }
+  } else if (i.status === 'completed') {
+    completed.push(i);
+  }
+});
+
+setActiveInvestments(active);
 setPendingInvestments(all.filter((i) => i.status === 'pending'));
+setCompletedInvestments(completed);
 setTransactions(txs || []);
 setWithdrawals(wd || []);
 
