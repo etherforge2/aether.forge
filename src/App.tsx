@@ -825,6 +825,33 @@ const totalProfit = calcProfit();
 })
       )}
     </div>
+{/* Completed Plans */}
+<div style={{ ...S.glassCard, padding: 22 }}>
+  <div style={{ fontWeight: 700, marginBottom: 18, fontSize: 15 }}>Completed Plans</div>
+
+  {loading ? (
+    <div style={{ color: PALETTE.textMuted, textAlign: "center", padding: "16px 0" }}>Loading...</div>
+  ) : completedInvestments.length === 0 ? (
+    <div style={{ color: PALETTE.textMuted, fontSize: 14, textAlign: "center", padding: "16px 0" }}>
+      No completed plans yet.
+    </div>
+  ) : (
+    completedInvestments.map((inv) => (
+      <div key={inv.id} style={{ background: "rgba(0,0,0,0.28)", borderRadius: 12, padding: 16, marginBottom: 12 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+          <span style={{ fontWeight: 700, fontSize: 14 }}>
+            {(inv.plan_name || inv.plan_id || "Plan").toString().toUpperCase()} Plan
+          </span>
+          <span style={{ color: PALETTE.success, fontSize: 12, fontWeight: 700 }}>COMPLETED</span>
+        </div>
+        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: PALETTE.textMuted }}>
+          <span>{fmtUSD(inv.amount)}</span>
+          <span>{inv.daily_rate}%/day</span>
+        </div>
+      </div>
+    ))
+  )}
+</div>
 
     {/* Transactions */}
     <div style={{ ...S.glassCard, padding: 22 }}>
