@@ -1263,13 +1263,73 @@ function FAQPage() {
 
 function ContactPage() {
   const isMobile = useIsMobile();
+  const [form, setForm] = useState({ name: "", email: "", subject: "Account Inquiry", message: "" });
+  const [loading, setLoading] = useState(false);
+  const [done, setDone] = useState(false);
+  const [err, setErr] = useState("");
+
+  const handleSubmit = async () => {
+    if (!form.name || !form.email || !form.message) {
+      setErr("Please fill name, email, and message.");
+      return;
+    }
+
+    setLoading(true);
+    setErr("");
+
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY,
+          name: form.name,
+          email: form.email,
+          subject: form.subject,
+          message: form.message,
+          from_name: "AetherForge Contact",
+        }),
+      });
+
+      const data = await res.json();
+      if (!data.success) throw new Error(data.message || "Failed to send");
+
+      setDone(true);
+      setForm({ name: "", email: "", subject: "Account Inquiry", message: "" });
+    } catch (e) {
+      setErr(e.message || "Something went wrong. Try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (done) {
+    return (
+      <div style={{ maxWidth: 520, margin: "80px auto", padding: "0 16px", textAlign: "center" }}>
+        <div style={{ ...S.glassCard, padding: 40 }}>
+          <div style={{ fontSize: 40, marginBottom: 12 }}>✓</div>
+          <div style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Message Sent</div>
+          <div style={{ color: PALETTE.textMuted, fontSize: 14, marginBottom: 24 }}>
+            We received your message and will reply soon.
+          </div>
+          <button onClick={() => setDone(false)} style={{ ...S.tealBtn, padding: "12px 28px", fontSize: 14 }}>
+            Send Another
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ maxWidth: 900, margin: "0 auto", padding: isMobile ? "40px 16px" : "60px 24px" }}>
       <div style={{ textAlign: "center", marginBottom: 44 }}>
         <div style={S.badge}>24/7 Support</div>
-        <h1 style={{ fontSize: isMobile ? 26 : 40, fontWeight: 800, letterSpacing: "-0.03em", marginTop: 12, marginBottom: 10 }}>We're Always Here</h1>
+        <h1 style={{ fontSize: isMobile ? 26 : 40, fontWeight: 800, letterSpacing: "-0.03em", marginTop: 12, marginBottom: 10 }}>
+          We're Always Here
+        </h1>
         <div style={{ color: PALETTE.textMuted, fontSize: 14 }}>Multilingual support team online around the clock.</div>
       </div>
+
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 20 }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {[
@@ -1288,19 +1348,61 @@ function ContactPage() {
             </div>
           ))}
         </div>
+
         <div style={{ ...S.glassCard, padding: isMobile ? 20 : 28 }}>
           <div style={{ fontWeight: 700, fontSize: 17, marginBottom: 20 }}>Send a Message</div>
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-            {[["Full Name","text","John Smith"],["Email","email","john@example.com"]].map(([l,t,p]) => (
-              <div key={l}><label style={S.label}>{l}</label><input style={S.input} type={t} placeholder={p} /></div>
-            ))}
-            <div><label style={S.label}>Subject</label>
-              <select style={{ ...S.input, appearance: "none" }}>
-                {["Account Inquiry","Deposit / Payment","Withdrawal","Technical Support","KYC","Other"].map(o => <option key={o}>{o}</option>)}
+            <div>
+              <label style={S.label}>Full Name</label>
+              <input
+                style={S.input}
+                type="text"
+                placeholder="John Smith"
+                value={form.name}
+                onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
+              />
+            </div>
+            <div>
+              <label style={S.label}>Email</label>
+              <input
+                style={S.input}
+                type="email"
+                placeholder="john@example.com"
+                value={form.email}
+                onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
+              />
+            </div>
+            <div>
+              <label style={S.label}>Subject</label>
+              <select
+                style={{ ...S.input, appearance: "none" }}
+                value={form.subject}
+                onChange={(e) => setForm((p) => ({ ...p, subject: e.target.value }))}
+              >
+                {["Account Inquiry", "Deposit / Payment", "Withdrawal", "Technical Support", "KYC", "Other"].map((o) => (
+                  <option key={o}>{o}</option>
+                ))}
               </select>
             </div>
-            <div><label style={S.label}>Message</label><textarea style={{ ...S.input, minHeight: 100, resize: "vertical", fontFamily: "inherit" }} placeholder="How can we help?" /></div>
-            <button style={{ ...S.tealBtn, width: "100%", padding: "13px 0", fontSize: 14 }}>Send Message →</button>
+            <div>
+              <label style={S.label}>Message</label>
+              <textarea
+                style={{ ...S.input, minHeight: 100, resize: "vertical", fontFamily: "inherit" }}
+                placeholder="How can we help?"
+                value={form.message}
+                onChange={(e) => setForm((p) => ({ ...p, message: e.target.value }))}
+              />
+            </div>
+
+            {err && <div style={{ color: PALETTE.danger, fontSize: 13, textAlign: "center" }}>{err}</div>}
+
+            <button
+              onClick={handleSubmit}
+              disabled={loading}
+              style={{ ...S.tealBtn, width: "100%", padding: "13px 0", fontSize: 14, opacity: loading ? 0.7 : 1 }}
+            >
+              {loading ? "Sending..." : "Send Message →"}
+            </button>
           </div>
         </div>
       </div>
