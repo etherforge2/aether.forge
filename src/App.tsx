@@ -587,13 +587,16 @@ const { data: profile } = await supabase
   .single();
 
 if (profile && setUser) {
-  setUser((prev) => ({
-    ...(prev || {}),
-    ...profile,
-    id: profile.id,
-    name: profile.name || prev?.name,
-    balance: profile.balance ?? 0,
-  }));
+  const newBalance = profile.balance ?? 0;
+  if (Number(user.balance || 0) !== Number(newBalance)) {
+    setUser((prev) => ({
+      ...(prev || {}),
+      ...profile,
+      id: profile.id,
+      name: profile.name || prev?.name,
+      balance: newBalance,
+    }));
+  }
 }
 
 setLoading(false);
