@@ -600,8 +600,7 @@ setLoading(false);
 };
 
     loadData();
-  }, [user]);
-
+  }, [user?.id]);
    
 
 
