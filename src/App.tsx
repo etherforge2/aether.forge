@@ -564,8 +564,14 @@ const { data: profile } = await supabase
   .eq('id', user.id)
   .single();
 
-if (profile && typeof user === 'object') {
-  user.balance = profile.balance;
+if (profile && setUser) {
+  setUser((prev) => ({
+    ...(prev || {}),
+    ...profile,
+    id: profile.id,
+    name: profile.name || prev?.name,
+    balance: profile.balance ?? 0,
+  }));
 }
 
 setLoading(false);
