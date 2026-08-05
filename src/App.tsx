@@ -998,12 +998,15 @@ const availableToWithdraw = Math.max(
     <div style={{ ...S.glassCard, padding: isMobile ? 20 : 30 }}>
       <div style={{ fontWeight: 700, fontSize: 17, marginBottom: 20 }}>Request Withdrawal</div>
 
-      <div style={{ background: "rgba(0,212,170,0.06)", border: "1px solid rgba(0,212,170,0.15)", borderRadius: 10, padding: 16, marginBottom: 20 }}>
-        <div style={{ fontSize: 12, color: PALETTE.textMuted, marginBottom: 4 }}>Available Balance</div>
-        <div style={{ fontSize: 26, fontWeight: 800, color: PALETTE.teal }}>
-          {fmtUSD(user?.balance || 0)}
-        </div>
-      </div>
+     <div style={{ background: "rgba(0,212,170,0.06)", border: "1px solid rgba(0,212,170,0.15)", borderRadius: 10, padding: 16, marginBottom: 20 }}>
+  <div style={{ fontSize: 12, color: PALETTE.textMuted, marginBottom: 4 }}>Available to Withdraw</div>
+  <div style={{ fontSize: 26, fontWeight: 800, color: PALETTE.teal }}>
+    {fmtUSD(availableToWithdraw)}
+  </div>
+  <div style={{ fontSize: 12, color: PALETTE.textMuted, marginTop: 6 }}>
+    Total balance {fmtUSD(user?.balance || 0)} · Locked {fmtUSD(lockedAmount)}
+  </div>
+</div>
 
       <div style={{ marginBottom: 14 }}>
         <label style={S.label}>Amount (USD)</label>
