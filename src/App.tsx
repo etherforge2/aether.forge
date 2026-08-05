@@ -669,6 +669,32 @@ const totalProfit = calcProfit();
         </div>
       </div>
 
+
+
+
+{/* Profile */}
+<div style={{ ...S.glassCard, padding: isMobile ? 16 : 20, marginBottom: 20 }}>
+  <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+    <div style={{
+      width: 48, height: 48, borderRadius: "50%",
+      background: `linear-gradient(135deg,${PALETTE.teal},#006B55)`,
+      display: "flex", alignItems: "center", justifyContent: "center",
+      fontWeight: 800, fontSize: 18, color: "#fff", flexShrink: 0
+    }}>
+      {(user?.name || "U").toString().charAt(0).toUpperCase()}
+    </div>
+    <div style={{ minWidth: 0 }}>
+      <div style={{ fontWeight: 800, fontSize: 16 }}>{user?.name || "Investor"}</div>
+      <div style={{ fontSize: 12, color: PALETTE.textMuted, marginTop: 2 }}>
+        Member ID: {(user?.id || "").toString().slice(0, 8).toUpperCase() || "—"}
+      </div>
+      <div style={{ fontSize: 12, color: PALETTE.textMuted, marginTop: 2 }}>
+        Status: <span style={{ color: PALETTE.success, fontWeight: 700 }}>Verified</span>
+      </div>
+    </div>
+  </div>
+</div>
+
       {/* Balance cards */}
 <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4,1fr)", gap: 12, marginBottom: 24 }}>
   {[
