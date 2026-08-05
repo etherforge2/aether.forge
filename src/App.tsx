@@ -23,15 +23,18 @@ const CRYPTO_ASSETS = [
 ];
 
 const PLANS = [
-  { id: "silver", name: "Silver", min: 50, max: 400, daily: 2.5, duration: 3, color: "#A8B2C1", features: ["Basic AI Trading", "Email Support", "Daily Reports"] },
-  { id: "gold", name: "Gold", min: 900, max: 1400, daily: 3.8, duration: 5, color: "#C9A84C", features: ["Advanced AI Trading", "Priority Support", "Daily Reports", "Market Insights"] },
-  { id: "platinum", name: "Platinum", min: 1900, max: 2400, daily: 5.2, duration: 7, color: "#A0C4FF", features: ["Premium AI Suite", "24/7 Support", "Real-time Analytics", "Market Insights", "Dedicated Manager"] },
-  { id: "diamond", name: "Diamond", min: 2900, max: 3400, daily: 6.8, duration: 10, color: "#B9F2FF", features: ["Elite AI Trading", "VIP Support", "Advanced Analytics", "Private Signals", "Account Manager", "Weekly Review"] },
-  { id: "elite", name: "Elite", min: 3900, max: 4900, daily: 8.5, duration: 14, color: "#FF9CEE", features: ["Institutional Suite", "White-glove Support", "Full Analytics", "Exclusive Signals", "Senior Manager", "Tax Reports"] },
-  { id: "vip", name: "VIP", min: 5400, max: 7900, daily: 10.2, duration: 21, color: "#00D4AA", features: ["Ultra AI Engine", "Dedicated Team", "Live Dashboard", "Block Trade Access", "C-Suite Advisor", "Tax + Legal"] },
-  { id: "enterprise", name: "Enterprise", min: 8400, max: 12900, daily: 12.5, duration: 30, color: "#FFD700", features: ["Full HFT Access", "Private Desk", "Custom Dashboard", "OTC Trading", "Portfolio Rebalancing", "Full Compliance Suite"] },
-  { id: "sovereign", name: "Sovereign", min: 13400, max: 50000, daily: 15.0, duration: 45, color: "#FF6B6B", features: ["Sovereign Desk", "Personal Quant Trader", "Bespoke Strategy", "Multi-asset Exposure", "Family Office Support", "Annual Performance Audit"] },
+  { id: "silver", name: "Silver", min: 50, max: 400, daily: 2.5, duration: 180, color: "#A8B2C1", features: ["Basic AI Trading", "Email Support", "Daily Reports"] },
+  { id: "gold", name: "Gold", min: 900, max: 1400, daily: 3.8, duration: 180, color: "#C9A84C", features: ["Advanced AI Trading", "Priority Support", "Daily Reports", "Market Insights"] },
+  { id: "platinum", name: "Platinum", min: 1900, max: 2400, daily: 5.2, duration: 270, color: "#A0C4FF", features: ["Premium AI Suite", "24/7 Support", "Real-time Analytics", "Market Insights", "Dedicated Manager"] },
+  { id: "diamond", name: "Diamond", min: 2900, max: 3400, daily: 6.8, duration: 270, color: "#B9F2FF", features: ["Elite AI Trading", "VIP Support", "Advanced Analytics", "Private Signals", "Account Manager", "Weekly Review"] },
+  { id: "elite", name: "Elite", min: 3900, max: 4900, daily: 8.5, duration: 365, color: "#FF9CEE", features: ["Institutional Suite", "White-glove Support", "Full Analytics", "Exclusive Signals", "Senior Manager", "Tax Reports"] },
+  { id: "vip", name: "VIP", min: 5400, max: 7900, daily: 10.2, duration: 365, color: "#00D4AA", features: ["Ultra AI Engine", "Dedicated Team", "Live Dashboard", "Block Trade Access", "C-Suite Advisor", "Tax + Legal"] },
+  { id: "enterprise", name: "Enterprise", min: 8400, max: 12900, daily: 12.5, duration: 365, color: "#FFD700", features: ["Full HFT Access", "Private Desk", "Custom Dashboard", "OTC Trading", "Portfolio Rebalancing", "Full Compliance Suite"] },
+  { id: "sovereign", name: "Sovereign", min: 13400, max: 50000, daily: 15.0, duration: 365, color: "#FF6B6B", features: ["Sovereign Desk", "Personal Quant Trader", "Bespoke Strategy", "Multi-asset Exposure", "Family Office Support", "Annual Performance Audit"] },
 ];
+
+
+
 
 const CRYPTO_WALLETS = [
   { id: "btc", name: "Bitcoin", sym: "BTC", network: "Bitcoin Network", addr: "bc1q7qun0kvg94ycsq5qqm5unrl5n4hn0x70d46ehy", color: "#F7931A", icon: "₿" },
