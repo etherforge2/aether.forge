@@ -1053,13 +1053,13 @@ const totalProfit = calcProfit();
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: 11, color: PALETTE.textMuted, marginBottom: 3 }}>Your Referral Link</div>
           <div style={{ fontFamily: "monospace", fontSize: 12, color: PALETTE.teal, wordBreak: "break-all" }}>
-            https://aetherforge.io/ref/{user?.id?.slice(0, 8) || "AF"}
+            https://aetherforge.com/ref/{user?.id?.slice(0, 8) || "AF"}
           </div>
         </div>
         <button 
           style={{ ...S.tealBtn, padding: "9px 16px", fontSize: 12, flexShrink: 0 }}
           onClick={() => {
-            navigator.clipboard.writeText(`https://aetherforge.io/ref/${user?.id?.slice(0, 8) || "AF"}`);
+            navigator.clipboard.writeText(`https://aetherforge.com/ref/${user?.id?.slice(0, 8) || "AF"}`);
             alert("Referral link copied!");
           }}
         >
