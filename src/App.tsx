@@ -749,6 +749,21 @@ const availableToWithdraw = Math.max(
   ))}
 </div>
 
+<div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 12, marginBottom: 24 }}>
+  <div style={{ ...S.glassCard, padding: isMobile ? 14 : 18 }}>
+    <div style={{ fontSize: 12, color: PALETTE.textMuted, marginBottom: 6 }}>Available to Withdraw</div>
+    <div style={{ fontSize: isMobile ? 18 : 22, fontWeight: 800, color: PALETTE.success }}>
+      {fmtUSD(availableToWithdraw)}
+    </div>
+  </div>
+  <div style={{ ...S.glassCard, padding: isMobile ? 14 : 18 }}>
+    <div style={{ fontSize: 12, color: PALETTE.textMuted, marginBottom: 6 }}>Locked in Active Plans</div>
+    <div style={{ fontSize: isMobile ? 18 : 22, fontWeight: 800, color: PALETTE.gold }}>
+      {fmtUSD(lockedAmount)}
+    </div>
+  </div>
+</div>
+
       {/* Tabs */}
       <div style={{ display: "flex", gap: 4, marginBottom: 24, background: "rgba(0,0,0,0.3)", borderRadius: 12, padding: 4, overflowX: "auto", width: "fit-content", maxWidth: "100%" }}>
         {tabs.map(t => (
