@@ -383,63 +383,79 @@ return (
         </div>
       </div>
 
-      {/* LIVE TRADES */}
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: isMobile ? "48px 16px" : "72px 24px" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
+      {/* LIVE TRADES (illustrative) */}
+<div style={{ maxWidth: 1100, margin: "0 auto", padding: isMobile ? "48px 16px" : "72px 24px" }}>
+  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20, gap: 12, flexWrap: "wrap" }}>
+    <div>
+      <div style={S.badge}>Market Illustration</div>
+      <h2 style={{ fontSize: isMobile ? 22 : 28, fontWeight: 700, marginTop: 10 }}>
+        Sample Trading Activity
+      </h2>
+      <div style={{ color: PALETTE.textMuted, fontSize: 12, marginTop: 6 }}>
+        Illustrative examples only. Not live user trades.
+      </div>
+    </div>
+    <div style={{ color: PALETTE.textMuted, fontSize: 12, fontWeight: 600 }}>
+      Demo data
+    </div>
+  </div>
+
+  {isMobile ? (
+    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      {LIVE_TRADES.map((t, i) => (
+        <div key={i} style={{ ...S.glassCard, padding: "14px 16px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div>
-            <div style={S.badge}>Live Activity</div>
-            <h2 style={{ fontSize: isMobile ? 22 : 28, fontWeight: 700, marginTop: 10 }}>Recent Platform Trades</h2>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+              <span style={{ fontWeight: 700, fontSize: 14 }}>{t.asset}</span>
+              <span style={{
+                background: t.type === "BUY" ? "rgba(72,187,120,0.15)" : "rgba(245,101,101,0.15)",
+                color: t.type === "BUY" ? PALETTE.success : PALETTE.danger,
+                borderRadius: 6, padding: "2px 8px", fontSize: 11, fontWeight: 700
+              }}>{t.type}</span>
+            </div>
+            <div style={{ fontSize: 12, color: PALETTE.textMuted, fontFamily: "monospace" }}>{t.time}</div>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <span style={{ width: 8, height: 8, borderRadius: "50%", background: PALETTE.success, display: "inline-block" }} />
-            <span style={{ color: PALETTE.success, fontSize: 13 }}>Live</span>
+          <div style={{ textAlign: "right" }}>
+            <div style={{ color: PALETTE.success, fontWeight: 700, fontSize: 15 }}>+{fmtUSD(t.pnl)}</div>
+            <div style={{ color: PALETTE.success, fontSize: 12 }}>+{t.pct}%</div>
           </div>
         </div>
-        {isMobile ? (
-          // Mobile card layout for trades
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {LIVE_TRADES.map((t, i) => (
-              <div key={i} style={{ ...S.glassCard, padding: "14px 16px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                    <span style={{ fontWeight: 700, fontSize: 14 }}>{t.asset}</span>
-                    <span style={{ background: t.type === "BUY" ? "rgba(72,187,120,0.15)" : "rgba(245,101,101,0.15)", color: t.type === "BUY" ? PALETTE.success : PALETTE.danger, borderRadius: 6, padding: "2px 8px", fontSize: 11, fontWeight: 700 }}>{t.type}</span>
-                  </div>
-                  <div style={{ fontSize: 12, color: PALETTE.textMuted, fontFamily: "monospace" }}>{t.time}</div>
-                </div>
-                <div style={{ textAlign: "right" }}>
-                  <div style={{ color: PALETTE.success, fontWeight: 700, fontSize: 15 }}>+{fmtUSD(t.pnl)}</div>
-                  <div style={{ color: PALETTE.success, fontSize: 12 }}>+{t.pct}%</div>
-                </div>
-              </div>
+      ))}
+    </div>
+  ) : (
+    <div style={{ ...S.glassCard, overflow: "hidden" }}>
+      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        <thead>
+          <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+            {["Time", "Asset", "Type", "Entry", "Exit", "P&L"].map(h => (
+              <th key={h} style={{ padding: "13px 16px", textAlign: "left", fontSize: 11, color: PALETTE.textMuted, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase" }}>{h}</th>
             ))}
-          </div>
-        ) : (
-          <div style={{ ...S.glassCard, overflow: "hidden" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
-              <thead>
-                <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                  {["Time", "Asset", "Type", "Entry", "Exit", "P&L"].map(h => (
-                    <th key={h} style={{ padding: "13px 16px", textAlign: "left", fontSize: 11, color: PALETTE.textMuted, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase" }}>{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {LIVE_TRADES.map((t, i) => (
-                  <tr key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-                    <td style={{ padding: "12px 16px", fontSize: 12, fontFamily: "monospace", color: PALETTE.textMuted }}>{t.time}</td>
-                    <td style={{ padding: "12px 16px", fontWeight: 700 }}>{t.asset}</td>
-                    <td style={{ padding: "12px 16px" }}><span style={{ background: t.type === "BUY" ? "rgba(72,187,120,0.15)" : "rgba(245,101,101,0.15)", color: t.type === "BUY" ? PALETTE.success : PALETTE.danger, borderRadius: 6, padding: "3px 10px", fontSize: 12, fontWeight: 700 }}>{t.type}</span></td>
-                    <td style={{ padding: "12px 16px", fontSize: 13, fontVariantNumeric: "tabular-nums" }}>{fmtUSD(t.entry)}</td>
-                    <td style={{ padding: "12px 16px", fontSize: 13, fontVariantNumeric: "tabular-nums" }}>{fmtUSD(t.exit)}</td>
-                    <td style={{ padding: "12px 16px", color: PALETTE.success, fontWeight: 700 }}>+{fmtUSD(t.pnl)} <span style={{ fontSize: 11, opacity: .7 }}>(+{t.pct}%)</span></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+          </tr>
+        </thead>
+        <tbody>
+          {LIVE_TRADES.map((t, i) => (
+            <tr key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+              <td style={{ padding: "12px 16px", fontSize: 12, fontFamily: "monospace", color: PALETTE.textMuted }}>{t.time}</td>
+              <td style={{ padding: "12px 16px", fontWeight: 700 }}>{t.asset}</td>
+              <td style={{ padding: "12px 16px" }}>
+                <span style={{
+                  background: t.type === "BUY" ? "rgba(72,187,120,0.15)" : "rgba(245,101,101,0.15)",
+                  color: t.type === "BUY" ? PALETTE.success : PALETTE.danger,
+                  borderRadius: 6, padding: "3px 10px", fontSize: 12, fontWeight: 700
+                }}>{t.type}</span>
+              </td>
+              <td style={{ padding: "12px 16px", fontSize: 13, fontVariantNumeric: "tabular-nums" }}>{fmtUSD(t.entry)}</td>
+              <td style={{ padding: "12px 16px", fontSize: 13, fontVariantNumeric: "tabular-nums" }}>{fmtUSD(t.exit)}</td>
+              <td style={{ padding: "12px 16px", color: PALETTE.success, fontWeight: 700 }}>
+                +{fmtUSD(t.pnl)} <span style={{ fontSize: 11, opacity: .7 }}>(+{t.pct}%)</span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )}
+</div>
 
       {/* TESTIMONIALS */}
       <div style={{ background: PALETTE.navyLight, padding: isMobile ? "48px 16px" : "72px 24px", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
