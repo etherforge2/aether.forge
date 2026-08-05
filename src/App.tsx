@@ -651,6 +651,17 @@ const calcProfit = () => {
 const totalProfit = calcProfit();
 
 
+const lockedAmount = (activeInvestments || []).reduce(
+  (sum, inv) => sum + Number(inv.amount || 0),
+  0
+);
+
+const availableToWithdraw = Math.max(
+  0,
+  Number(user?.balance || 0) - lockedAmount
+);
+
+
 
 
   if (!user) return (
