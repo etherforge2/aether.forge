@@ -1043,10 +1043,12 @@ const availableToWithdraw = Math.max(
             alert("Please enter wallet address");
             return;
           }
-          if (amount > (user?.balance || 0)) {
-            alert("Insufficient balance");
-            return;
-          }
+          if (amount > availableToWithdraw) {
+  alert(
+    "Insufficient available balance. Principal in active plans is locked until maturity."
+  );
+  return;
+}
 
           const { error } = await supabase.from('withdrawals').insert({
             user_id: user.id,
