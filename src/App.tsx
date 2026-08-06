@@ -1291,6 +1291,21 @@ if (!invData) {
               </div>
             ))}
           </div>
+<div style={{
+  background: "rgba(201,168,76,0.08)",
+  border: "1px solid rgba(201,168,76,0.25)",
+  borderRadius: 12,
+  padding: 14,
+  fontSize: 12,
+  color: PALETTE.gold,
+  lineHeight: 1.7
+}}>
+  🔒 <strong>Lock period:</strong> Your principal is locked for{" "}
+  <strong>{plan?.duration || 180} days</strong> (until plan maturity).
+  You can withdraw profits only while the plan is active.
+  Full principal becomes available after completion.
+</div>
+
         </div>
 
         {/* Right */}
