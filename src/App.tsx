@@ -1647,7 +1647,14 @@ function Footer({ setPage }) {
 
 // ── ROOT ─────────────────────────────────────────────────────────────────────
 export default function App() {
-  const [page, setPage] = useState("home");
+  const [page, setPage] = useState(() => {
+  try {
+    return sessionStorage.getItem("af_page") || "home";
+  } catch {
+    return "home";
+  }
+});
+
   const [user, setUser] = useState(null);
   const [showAuth, setShowAuth] = useState(null);
   const [selectedPlan, setSelectedPlan] = useState(null);
@@ -1683,25 +1690,34 @@ export default function App() {
   };
 
   const nav = useCallback((p) => {
-    if (p === "dashboard" && !user) {
-      setShowAuth("login");
-      return;
-    }
-    setPage(p);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [user]);
+  if (p === "dashboard" && !user) {
+    setShowAuth("login");
+    return;
+  }
+  setPage(p);
+  try {
+    sessionStorage.setItem("af_page", p);
+  } catch {}
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}, [user]);
 
   const onAuth = (u) => {
-    setUser(u);
-    setShowAuth(null);
-    setPage("dashboard");
-  };
+  setUser(u);
+  setShowAuth(null);
+  setPage("dashboard");
+  try {
+    sessionStorage.setItem("af_page", "dashboard");
+  } catch {}
+};
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
-    setPage("home");
-  };
+  await supabase.auth.signOut();
+  setUser(null);
+  setPage("home");
+  try {
+    sessionStorage.removeItem("af_page");
+  } catch {}
+};
 
   const renderPage = () => {
     switch (page) {
