@@ -1252,6 +1252,7 @@ function PaymentPage({ plan, user, setPage, setShowAuth }) {
   const [copied, setCopied] = useState(false);
   const [done, setDone] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+const [termMonths, setTermMonths] = useState(12);
 
   const handlePaymentConfirm = async () => {
     if (!user || !plan) return;
