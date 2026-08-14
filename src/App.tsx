@@ -380,9 +380,11 @@ function PlanCard({ plan, onSelect }) {
           <div style={{ fontSize: 22, fontWeight: 800, color: plan.color }}>{plan.name}</div>
         </div>
         <div style={{ textAlign: "right" }}>
-          <div style={{ fontSize: 26, fontWeight: 900, color: PALETTE.teal }}>{plan.daily}%</div>
-          <div style={{ fontSize: 11, color: PALETTE.textMuted }}>Daily ROI</div>
-        </div>
+  <div style={{ fontSize: 20, fontWeight: 900, color: PALETTE.teal }}>
+    {plan.monthlyMin}%–{plan.monthlyMax}%
+  </div>
+  <div style={{ fontSize: 11, color: PALETTE.textMuted }}>Monthly target</div>
+</div>
       </div>
       <div style={{ background: "rgba(0,0,0,0.3)", borderRadius: 10, padding: "12px 14px", marginBottom: 16, fontSize: 13 }}>
         {[["Range", `${fmtUSD(plan.min)} – ${fmtUSD(plan.max)}`], ["Duration", `${plan.duration} Days`], ["Total Return", `+${totalReturn.toFixed(1)}%`]].map(([l, v], i) => (
