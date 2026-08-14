@@ -1254,6 +1254,14 @@ function PaymentPage({ plan, user, setPage, setShowAuth }) {
   const [submitting, setSubmitting] = useState(false);
 const [termMonths, setTermMonths] = useState(12);
 
+const termOptions = [3, 6, 9, 12, 15, 18, 21, 24];
+const monthlyMid = plan?.monthlyMid ?? 1.6;
+const monthlyMin = plan?.monthlyMin ?? 1.2;
+const monthlyMax = plan?.monthlyMax ?? 2.0;
+const estMonthly = amount * (monthlyMid / 100);
+const estTotal = estMonthly * termMonths;
+const completionBonusPct = termMonths >= 18 ? 10 : termMonths >= 12 ? 7 : 5;
+
   const handlePaymentConfirm = async () => {
     if (!user || !plan) return;
 
