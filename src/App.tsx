@@ -985,7 +985,7 @@ const availableToWithdraw = Math.max(
     <div key={inv.id} style={{ background: "rgba(0,0,0,0.3)", borderRadius: 12, padding: 16, marginBottom: 12 }}>
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
         <span style={{ fontWeight: 700, fontSize: 14 }}>{inv.plan_id?.toUpperCase()} Plan</span>
-        <span style={{ color: PALETTE.teal, fontSize: 13 }}>{inv.daily_rate}%/day</span>
+        <span style={{ color: PALETTE.teal, fontSize: 13 }}>{(inv.monthly_rate_mid ?? inv.daily_rate)}%/mo target</span>
       </div> 
 
 
@@ -1041,7 +1041,7 @@ const availableToWithdraw = Math.max(
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: PALETTE.textMuted }}>
           <span>{fmtUSD(inv.amount)}</span>
-          <span>{inv.daily_rate}%/day</span>
+          <span>{(inv.monthly_rate_mid ?? inv.daily_rate)}%/mo target</span>
         </div>
       </div>
     ))
@@ -1092,7 +1092,7 @@ const availableToWithdraw = Math.max(
           <div key={`inv-${inv.id}`} style={{ background: "rgba(0,0,0,0.28)", borderRadius: 12, padding: 14 }}>
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
               <span style={{ fontWeight: 700 }}>{inv.plan_id?.toUpperCase()} Plan</span>
-              <span style={{ color: PALETTE.teal, fontWeight: 700 }}>{inv.daily_rate}%/day</span>
+              <span style={{ color: PALETTE.teal, fontWeight: 700 }}>{(inv.monthly_rate_mid ?? inv.daily_rate)}%/mo target</span>
             </div>
             <div style={{ fontSize: 12, color: PALETTE.textMuted }}>
               Active investment · {fmtUSD(inv.amount)}
