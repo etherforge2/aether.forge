@@ -224,8 +224,7 @@ function LiveTicker({ prices }) {
 function Nav({ page, setPage, user, setUser, setShowAuth }) {
   const [open, setOpen] = useState(false);
   const isMobile = useIsMobile();
-  const navItems = ["Home", "About", "Plans", "Markets", "Dashboard", "Affiliate", "FAQ", "Contact"];
-
+  const navItems = ["Home", "About", "Plans", "Markets", "Dashboard", "Policy", "FAQ", "Contact"];
   return (
     <nav style={{ background: "rgba(8,12,24,0.92)", backdropFilter: "blur(16px)", borderBottom: "1px solid rgba(255,255,255,0.06)", position: "sticky", top: 0, zIndex: 100 }}>
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 16px", display: "flex", alignItems: "center", justifyContent: "space-between", height: isMobile ? 58 : 68 }}>
