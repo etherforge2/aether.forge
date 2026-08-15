@@ -370,30 +370,69 @@ function AuthModal({ mode, onClose, onSuccess }) {
 // ── PLAN CARD ────────────────────────────────────────────────────────────────
 function PlanCard({ plan, onSelect }) {
   const [hover, setHover] = useState(false);
-  const totalReturn = plan.daily * plan.duration;
+
   return (
-    <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} style={{ ...S.glassCard, padding: "22px 20px", transition: "all .25s", transform: hover ? "translateY(-3px)" : "none", boxShadow: hover ? `0 16px 48px rgba(0,0,0,0.4),0 0 0 1px ${plan.color}40` : "none", position: "relative", overflow: "hidden" }}>
-      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg,${plan.color},${plan.color}40)` }} />
+    <div
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        ...S.glassCard,
+        padding: "22px 20px",
+        transition: "all .25s",
+        transform: hover ? "translateY(-3px)" : "none",
+        boxShadow: hover ? `0 16px 48px rgba(0,0,0,0.4),0 0 0 1px ${plan.color}40` : "none",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 3,
+          background: `linear-gradient(90deg,\( {plan.color}, \){plan.color}40)`,
+        }}
+      />
+
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
         <div>
-          <div style={{ fontSize: 11, color: PALETTE.textMuted, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 3 }}>Investment Plan</div>
+          <div
+            style={{
+              fontSize: 11,
+              color: PALETTE.textMuted,
+              fontWeight: 600,
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              marginBottom: 3,
+            }}
+          >
+            Investment Plan
+          </div>
           <div style={{ fontSize: 22, fontWeight: 800, color: plan.color }}>{plan.name}</div>
         </div>
         <div style={{ textAlign: "right" }}>
-  <div style={{ fontSize: 20, fontWeight: 900, color: PALETTE.teal }}>
-    {plan.monthlyMin}%–{plan.monthlyMax}%
-  </div>
-  <div style={{ fontSize: 11, color: PALETTE.textMuted }}>Monthly target</div>
-</div>
+          <div style={{ fontSize: 18, fontWeight: 900, color: PALETTE.teal }}>
+            {plan.monthlyMin}%–{plan.monthlyMax}%
+          </div>
+          <div style={{ fontSize: 11, color: PALETTE.textMuted }}>Monthly target</div>
+        </div>
       </div>
+
       <div style={{ background: "rgba(0,0,0,0.3)", borderRadius: 10, padding: "12px 14px", marginBottom: 16, fontSize: 13 }}>
-        {[["Range", `${fmtUSD(plan.min)} – ${fmtUSD(plan.max)}`], ["Duration", `${plan.duration} Days`], ["Total Return", `+${totalReturn.toFixed(1)}%`]].map(([l, v], i) => (
+        {[
+          ["Range", `${fmtUSD(plan.min)} – ${fmtUSD(plan.max)}`],
+          ["Settlement", "Monthly"],
+          ["Term", "3–24 months (you choose)"],
+        ].map(([l, v], i) => (
           <div key={i} style={{ display: "flex", justifyContent: "space-between", marginBottom: i < 2 ? 8 : 0 }}>
             <span style={{ color: PALETTE.textMuted }}>{l}</span>
-            <span style={{ fontWeight: 700, color: i === 2 ? PALETTE.success : PALETTE.text }}>{v}</span>
+            <span style={{ fontWeight: 700, color: PALETTE.text }}>{v}</span>
           </div>
         ))}
       </div>
+
       <div style={{ marginBottom: 18 }}>
         {plan.features.map((f, i) => (
           <div key={i} style={{ display: "flex", gap: 8, marginBottom: 6, alignItems: "center" }}>
@@ -402,7 +441,10 @@ function PlanCard({ plan, onSelect }) {
           </div>
         ))}
       </div>
-      <button onClick={() => onSelect(plan)} style={{ ...S.tealBtn, width: "100%", padding: "13px 0", fontSize: 14 }}>Choose {plan.name}</button>
+
+      <button onClick={() => onSelect(plan)} style={{ ...S.tealBtn, width: "100%", padding: "13px 0", fontSize: 14 }}>
+        Choose {plan.name}
+      </button>
     </div>
   );
 }
