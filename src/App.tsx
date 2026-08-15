@@ -1636,6 +1636,120 @@ function AboutPage() {
   );
 }
 
+
+function PolicyPage() {
+  const isMobile = useIsMobile();
+
+  const tiers = [
+    ["Silver", "1.2% – 2.0%"],
+    ["Gold", "1.8% – 2.8%"],
+    ["Platinum", "2.5% – 3.2%"],
+    ["Diamond", "2.8% – 3.6%"],
+    ["Elite", "3.0% – 3.9%"],
+    ["VIP", "3.2% – 4.2%"],
+    ["Enterprise", "3.5% – 4.4%"],
+    ["Sovereign", "3.8% – 4.5%"],
+  ];
+
+  const bonuses = [
+    ["3–11 months", "+5% of principal"],
+    ["12–17 months", "+7% of principal"],
+    ["18–24 months", "+10% of principal"],
+  ];
+
+  const section = (title, body) => (
+    <div style={{ ...S.glassCard, padding: isMobile ? 18 : 24, marginBottom: 14 }}>
+      <div style={{ fontWeight: 800, fontSize: 15, marginBottom: 10, color: PALETTE.teal }}>{title}</div>
+      <div style={{ fontSize: 13, color: PALETTE.textMuted, lineHeight: 1.75 }}>{body}</div>
+    </div>
+  );
+
+  return (
+    <div style={{ maxWidth: 900, margin: "0 auto", padding: isMobile ? "40px 16px" : "60px 24px" }}>
+      <div style={{ textAlign: "center", marginBottom: 36 }}>
+        <div style={S.badge}>Operations</div>
+        <h1 style={{ fontSize: isMobile ? 26 : 40, fontWeight: 800, letterSpacing: "-0.03em", marginTop: 12, marginBottom: 10 }}>
+          Investment Policy
+        </h1>
+        <div style={{ color: PALETTE.textMuted, fontSize: isMobile ? 13 : 15, maxWidth: 560, margin: "0 auto", lineHeight: 1.7 }}>
+          Monthly AI settlement · investor-chosen term (3–24 months) · clear early-exit and bonus rules.
+        </div>
+      </div>
+
+      {section(
+        "1. Overview",
+        "AetherForge allocates committed capital using AI-assisted trading strategies. Performance is reviewed on a monthly settlement cycle. Investors select their own commitment term from 3 to 24 months. Longer terms unlock higher plan tiers and higher completion-bonus eligibility."
+      )}
+
+      <div style={{ ...S.glassCard, padding: isMobile ? 18 : 24, marginBottom: 14 }}>
+        <div style={{ fontWeight: 800, fontSize: 15, marginBottom: 10, color: PALETTE.teal }}>2. Target monthly performance</div>
+        <div style={{ fontSize: 13, color: PALETTE.textMuted, lineHeight: 1.75, marginBottom: 14 }}>
+          Each plan shows a target monthly range. These are potential performance targets under normal market conditions, not a fixed promise of profit every month. Capital is at risk.
+        </div>
+        {tiers.map(([name, range]) => (
+          <div key={name} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: 13 }}>
+            <span style={{ color: PALETTE.text }}>{name}</span>
+            <span style={{ fontWeight: 700, color: PALETTE.teal }}>{range}</span>
+          </div>
+        ))}
+      </div>
+
+      {section(
+        "3. Investment term",
+        "Minimum term is 3 months. Maximum term is 24 months. Term is selected by the investor at checkout. Commitments of 18–24 months receive long-horizon treatment and the highest completion-bonus eligibility."
+      )}
+
+      {section(
+        "4. Funding and activation",
+        "1) Investor submits payment and investment request. 2) Request remains pending until payment is confirmed. 3) After approval, the investment becomes active and the term clock starts. 4) Principal is treated as locked for the active term."
+      )}
+
+      {section(
+        "5. Monthly settlement",
+        "While an investment is active, performance is assessed on a monthly basis. Credits, when applied, are recorded as monthly settlement activity. On-site estimates use illustrative mid-range projections and are not guaranteed payouts."
+      )}
+
+      {section(
+        "6. Early exit",
+        "If an investor exits before the chosen maturity date: principal is returned; accrued or displayed profit is forfeited; completion bonus is not paid; outperformance bonuses are not paid."
+      )}
+
+      <div style={{ ...S.glassCard, padding: isMobile ? 18 : 24, marginBottom: 14 }}>
+        <div style={{ fontWeight: 800, fontSize: 15, marginBottom: 10, color: PALETTE.teal }}>7. Completion bonus (full term)</div>
+        <div style={{ fontSize: 13, color: PALETTE.textMuted, lineHeight: 1.75, marginBottom: 12 }}>
+          Investments held to full maturity may receive a completion bonus on principal.
+        </div>
+        {bonuses.map(([term, bonus]) => (
+          <div key={term} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: 13 }}>
+            <span style={{ color: PALETTE.text }}>{term}</span>
+            <span style={{ fontWeight: 700, color: PALETTE.gold }}>{bonus}</span>
+          </div>
+        ))}
+      </div>
+
+      {section(
+        "8. Market outperformance bonus",
+        "If a settlement month exceeds the top of the plan’s target monthly range, an outperformance bonus may be applied on the excess. Client share of excess is 60%. Early exit forfeits bonus eligibility."
+      )}
+
+      {section(
+        "9. Withdrawals",
+        "Withdrawals are limited to available balance (total balance minus principal locked in active investments). Withdrawal requests are reviewed before completion."
+      )}
+
+      <div style={{ ...S.glassCard, padding: isMobile ? 18 : 24, marginBottom: 14, borderColor: "rgba(201,168,76,0.25)" }}>
+        <div style={{ fontWeight: 800, fontSize: 15, marginBottom: 10, color: PALETTE.gold }}>10. Risk disclosure</div>
+        <div style={{ fontSize: 13, color: PALETTE.textMuted, lineHeight: 1.75 }}>
+          Trading and digital-asset strategies involve risk of loss. Target ranges are not guarantees. Illustrative dashboards,
+          sample market data, and estimated figures are for product transparency. This is not personalized financial advice.
+          Capital at risk.
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
 function Footer({ setPage }) {
   const isMobile = useIsMobile();
   return (
