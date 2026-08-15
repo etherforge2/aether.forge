@@ -931,7 +931,7 @@ const availableToWithdraw = Math.max(
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: PALETTE.textMuted }}>
           <span>{fmtUSD(inv.amount)}</span>
-          <span>{inv.daily_rate}%/day</span>
+         <span>{(inv.monthly_rate_mid ?? inv.daily_rate)}%/mo target</span>
         </div>
         <div style={{ marginTop: 8, fontSize: 12, color: PALETTE.gold }}>
           Waiting for payment confirmation
