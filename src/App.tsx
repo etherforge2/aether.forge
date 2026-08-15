@@ -1755,9 +1755,10 @@ export default function App() {
       case "dashboard": return <DashboardPage user={user} setUser={setUser} setPage={nav} setShowAuth={setShowAuth} />;
       case "payment": return <PaymentPage plan={selectedPlan} user={user} setPage={nav} setShowAuth={setShowAuth} />;
       case "affiliate": return <AffiliatePage />;
-      case "faq": return <FAQPage />;
-      case "contact": return <ContactPage />;
       case "about": return <AboutPage />;
+case "policy": return <PolicyPage />;
+case "faq": return <FAQPage />;
+case "contact": return <ContactPage />;
       default: return <HomePage prices={prices} setPage={nav} setShowAuth={setShowAuth} setSelectedPlan={setSelectedPlan} />;
     }
   };
