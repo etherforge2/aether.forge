@@ -1291,18 +1291,18 @@ function PaymentPage({ plan, user, setPage, setShowAuth }) {
   const isMobile = useIsMobile();
   const [selected, setSelected] = useState(CRYPTO_WALLETS[0]);
   const [amount, setAmount] = useState(plan?.min ?? 500);
+  const [termMonths, setTermMonths] = useState(12);
   const [copied, setCopied] = useState(false);
   const [done, setDone] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-const [termMonths, setTermMonths] = useState(12);
 
-const termOptions = [3, 6, 9, 12, 15, 18, 21, 24];
-const monthlyMid = plan?.monthlyMid ?? 1.6;
-const monthlyMin = plan?.monthlyMin ?? 1.2;
-const monthlyMax = plan?.monthlyMax ?? 2.0;
-const estMonthly = amount * (monthlyMid / 100);
-const estTotal = estMonthly * termMonths;
-const completionBonusPct = termMonths >= 18 ? 10 : termMonths >= 12 ? 7 : 5;
+  const termOptions = [3, 6, 9, 12, 15, 18, 21, 24];
+  const monthlyMid = plan?.monthlyMid ?? 1.6;
+  const monthlyMin = plan?.monthlyMin ?? 1.2;
+  const monthlyMax = plan?.monthlyMax ?? 2.0;
+  const estMonthly = amount * (monthlyMid / 100);
+  const estTotal = estMonthly * termMonths;
+  const completionBonusPct = termMonths >= 18 ? 10 : termMonths >= 12 ? 7 : 5;
 
   const handlePaymentConfirm = async () => {
     if (!user || !plan) return;
@@ -1310,39 +1310,45 @@ const completionBonusPct = termMonths >= 18 ? 10 : termMonths >= 12 ? 7 : 5;
     setSubmitting(true);
 
     try {
-      // 1. Create investment
+      const end = new Date();
+      end.setMonth(end.getMonth() + termMonths);
+
       const { data: invData, error: invError } = await supabase
-  .from('investments')
-  .insert({
-    user_id: user.id,
-    plan_id: plan.id,
-    plan_name: plan.name,
-    amount: amount,
-    daily_rate: plan.daily,
-    duration_days: plan.duration,
-    payment_method: selected.sym,
-    status: 'pending',
-    start_date: new Date().toISOString(),
-    end_date: new Date(Date.now() + plan.duration * 24 * 60 * 60 * 1000).toISOString()
-  })
-  .select()
-  .single();
+        .from("investments")
+        .insert({
+          user_id: user.id,
+          plan_id: plan.id,
+          plan_name: plan.name,
+          amount: amount,
+          term_months: termMonths,
+          monthly_rate_min: monthlyMin,
+          monthly_rate_max: monthlyMax,
+          monthly_rate_mid: monthlyMid,
+          daily_rate: monthlyMid,
+          duration_days: termMonths * 30,
+          payment_method: selected.sym,
+          status: "pending",
+          start_date: new Date().toISOString(),
+          end_date: end.toISOString(),
+        })
+        .select()
+        .single();
 
-if (invError) {
-  alert("Investment error: " + invError.message);
-  throw invError;
-}
+      if (invError) {
+        alert("Investment error: " + invError.message);
+        throw invError;
+      }
 
-if (!invData) {
-  alert("Investment not saved");
-  throw new Error("No investment row returned");
-}
-      // 2. Create transaction
-      const { error: txError } = await supabase.from('transactions').insert({
+      if (!invData) {
+        alert("Investment not saved");
+        throw new Error("No investment row returned");
+      }
+
+      const { error: txError } = await supabase.from("transactions").insert({
         user_id: user.id,
-        type: 'investment',
+        type: "investment",
         amount: amount,
-        description: `Investment in ${plan.name} plan`
+        description: `Investment in \( {plan.name} plan ( \){termMonths} months)`,
       });
 
       if (txError) throw txError;
@@ -1355,97 +1361,239 @@ if (!invData) {
     }
   };
 
-  const copyAddr = () => { navigator.clipboard.writeText(selected.addr).catch(() => {}); setCopied(true); setTimeout(() => setCopied(false), 2000); };
+  const copyAddr = () => {
+    navigator.clipboard.writeText(selected.addr).catch(() => {});
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
-  if (!user) return (
-    <div style={{ maxWidth: 460, margin: "80px auto", padding: "0 16px", textAlign: "center" }}>
-      <div style={{ ...S.glassCard, padding: 40 }}>
-        <div style={{ fontSize: 40, marginBottom: 14 }}>🔐</div>
-        <div style={{ fontSize: 20, fontWeight: 700, marginBottom: 10 }}>Login Required</div>
-        <div style={{ color: PALETTE.textMuted, marginBottom: 24, fontSize: 14 }}>Please sign in to invest.</div>
-        <button onClick={() => setShowAuth("login")} style={{ ...S.tealBtn, padding: "13px 36px", fontSize: 15 }}>Sign In</button>
+  if (!user) {
+    return (
+      <div style={{ maxWidth: 460, margin: "80px auto", padding: "0 16px", textAlign: "center" }}>
+        <div style={{ ...S.glassCard, padding: 40 }}>
+          <div style={{ fontSize: 40, marginBottom: 14 }}>🔐</div>
+          <div style={{ fontSize: 20, fontWeight: 700, marginBottom: 10 }}>Login Required</div>
+          <div style={{ color: PALETTE.textMuted, marginBottom: 24, fontSize: 14 }}>Please sign in to invest.</div>
+          <button onClick={() => setShowAuth("login")} style={{ ...S.tealBtn, padding: "13px 36px", fontSize: 15 }}>
+            Sign In
+          </button>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 
-  if (done) return (
-    <div style={{ maxWidth: 500, margin: "60px auto", padding: "0 16px", textAlign: "center" }}>
-      <div style={{ ...S.glassCard, padding: isMobile ? 28 : 44 }}>
-        <div style={{ width: 68, height: 68, borderRadius: "50%", background: "rgba(72,187,120,0.15)", border: `2px solid ${PALETTE.success}`, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", fontSize: 30 }}>✓</div>
-        <div style={{ fontSize: 22, fontWeight: 800, marginBottom: 10 }}>Payment Submitted</div>
-        <div style={{ color: PALETTE.textMuted, lineHeight: 1.7, marginBottom: 24, fontSize: 14 }}>
-  Your {fmtUSD(amount)} investment in <strong style={{ color: PALETTE.teal }}>{plan.name}</strong> is pending confirmation. It will appear in your Active Plans after approval.
-</div>
-        <button onClick={() => setPage("dashboard")} style={{ ...S.tealBtn, padding: "13px 36px", fontSize: 15 }}>Go to Dashboard</button>
+  if (done) {
+    return (
+      <div style={{ maxWidth: 500, margin: "60px auto", padding: "0 16px", textAlign: "center" }}>
+        <div style={{ ...S.glassCard, padding: isMobile ? 28 : 44 }}>
+          <div
+            style={{
+              width: 68,
+              height: 68,
+              borderRadius: "50%",
+              background: "rgba(72,187,120,0.15)",
+              border: `2px solid ${PALETTE.success}`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              margin: "0 auto 20px",
+              fontSize: 30,
+            }}
+          >
+            ✓
+          </div>
+          <div style={{ fontSize: 22, fontWeight: 800, marginBottom: 10 }}>Payment Submitted</div>
+          <div style={{ color: PALETTE.textMuted, lineHeight: 1.7, marginBottom: 24, fontSize: 14 }}>
+            Your {fmtUSD(amount)} investment in <strong style={{ color: PALETTE.teal }}>{plan?.name}</strong> for{" "}
+            <strong style={{ color: PALETTE.gold }}>{termMonths} months</strong> is pending confirmation. It will
+            appear in Active Plans after approval.
+          </div>
+          <button onClick={() => setPage("dashboard")} style={{ ...S.tealBtn, padding: "13px 36px", fontSize: 15 }}>
+            Go to Dashboard
+          </button>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 
   return (
     <div style={{ maxWidth: 900, margin: "0 auto", padding: isMobile ? "28px 16px" : "48px 24px" }}>
       <div style={{ marginBottom: 28 }}>
         <div style={S.badge}>Secure Payment</div>
-        <h1 style={{ fontSize: isMobile ? 24 : 32, fontWeight: 800, marginTop: 10, marginBottom: 6 }}>Complete Your Investment</h1>
-        <div style={{ color: PALETTE.textMuted, fontSize: 13 }}>Military-grade encrypted transaction.</div>
+        <h1 style={{ fontSize: isMobile ? 24 : 32, fontWeight: 800, marginTop: 10, marginBottom: 6 }}>
+          Complete Your Investment
+        </h1>
+        <div style={{ color: PALETTE.textMuted, fontSize: 13 }}>
+          Monthly AI settlement · Choose your term · Capital at risk
+        </div>
       </div>
+
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 20 }}>
         {/* Left */}
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           <div style={{ ...S.glassCard, padding: isMobile ? 20 : 24 }}>
-            <div style={{ fontSize: 11, color: PALETTE.textMuted, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 12 }}>Selected Plan</div>
+            <div
+              style={{
+                fontSize: 11,
+                color: PALETTE.textMuted,
+                fontWeight: 600,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                marginBottom: 12,
+              }}
+            >
+              Selected Plan
+            </div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
               <div>
                 <div style={{ fontSize: 20, fontWeight: 800, color: plan?.color ?? PALETTE.teal }}>{plan?.name}</div>
-                <div style={{ fontSize: 12, color: PALETTE.textMuted }}>{plan?.daily}% daily · {plan?.duration} days</div>
+                <div style={{ fontSize: 12, color: PALETTE.textMuted }}>
+                  {monthlyMin}% – {monthlyMax}% monthly target
+                </div>
               </div>
               <div style={{ textAlign: "right" }}>
-                <div style={{ fontSize: 20, fontWeight: 800, color: PALETTE.success }}>+{(plan?.daily * plan?.duration).toFixed(1)}%</div>
-                <div style={{ fontSize: 11, color: PALETTE.textMuted }}>Total ROI</div>
+                <div style={{ fontSize: 18, fontWeight: 800, color: PALETTE.success }}>{monthlyMid}%</div>
+                <div style={{ fontSize: 11, color: PALETTE.textMuted }}>Mid estimate</div>
               </div>
             </div>
+
             <label style={S.label}>Investment Amount (USD)</label>
             <div style={{ position: "relative" }}>
-              <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: PALETTE.teal, fontWeight: 700 }}>$</span>
-              <input type="number" min={plan?.min} max={plan?.max} value={amount} onChange={e => setAmount(Number(e.target.value))} style={{ ...S.input, paddingLeft: 28 }} />
+              <span
+                style={{
+                  position: "absolute",
+                  left: 14,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  color: PALETTE.teal,
+                  fontWeight: 700,
+                }}
+              >
+                $
+              </span>
+              <input
+                type="number"
+                min={plan?.min}
+                max={plan?.max}
+                value={amount}
+                onChange={(e) => setAmount(Number(e.target.value))}
+                style={{ ...S.input, paddingLeft: 28 }}
+              />
             </div>
-            <div style={{ fontSize: 12, color: PALETTE.textMuted, marginTop: 6 }}>Range: {fmtUSD(plan?.min)} – {fmtUSD(plan?.max)}</div>
+            <div style={{ fontSize: 12, color: PALETTE.textMuted, marginTop: 6 }}>
+              Range: {fmtUSD(plan?.min)} – {fmtUSD(plan?.max)}
+            </div>
+
+            <div style={{ marginTop: 14 }}>
+              <label style={S.label}>Investment term (months)</label>
+              <select
+                style={{ ...S.input, appearance: "none" }}
+                value={termMonths}
+                onChange={(e) => setTermMonths(Number(e.target.value))}
+              >
+                {termOptions.map((m) => (
+                  <option key={m} value={m}>
+                    {m} months
+                  </option>
+                ))}
+              </select>
+              <div style={{ fontSize: 12, color: PALETTE.textMuted, marginTop: 6 }}>
+                You choose maturity from 3 to 24 months
+              </div>
+              {termMonths >= 18 && (
+                <div style={{ fontSize: 12, color: PALETTE.gold, marginTop: 6 }}>
+                  Long-term commitment: highest completion-bonus eligibility (up to +10% of principal at maturity).
+                </div>
+              )}
+            </div>
           </div>
+
           <div style={{ ...S.glassCard, padding: isMobile ? 20 : 24 }}>
-            <div style={{ fontSize: 11, color: PALETTE.textMuted, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 14 }}>Estimated Returns</div>
+            <div
+              style={{
+                fontSize: 11,
+                color: PALETTE.textMuted,
+                fontWeight: 600,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                marginBottom: 14,
+              }}
+            >
+              Estimated Returns (illustrative)
+            </div>
             {[
               ["Est. monthly (mid)", estMonthly],
-[`Est. over ${termMonths} months (mid)`, estTotal],
-[`Completion bonus if held full term (+${completionBonusPct}%)`, amount * (completionBonusPct / 100)],
+              [`Est. over ${termMonths} months (mid)`, estTotal],
+              [`Completion bonus if held full term (+${completionBonusPct}%)`, amount * (completionBonusPct / 100)],
             ].map(([l, v], i) => (
-              <div key={i} style={{ display: "flex", justifyContent: "space-between", marginBottom: 12, paddingBottom: 12, borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.05)" : "none" }}>
+              <div
+                key={i}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: 12,
+                  paddingBottom: 12,
+                  borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.05)" : "none",
+                }}
+              >
                 <span style={{ color: PALETTE.textMuted, fontSize: 13 }}>{l}</span>
-                <span style={{ fontWeight: 700, color: i === 2 ? PALETTE.success : PALETTE.text, fontSize: 14 }}>{fmtUSD(v)}</span>
+                <span style={{ fontWeight: 700, color: i === 2 ? PALETTE.success : PALETTE.text, fontSize: 14 }}>
+                  {fmtUSD(v)}
+                </span>
               </div>
             ))}
+            <div style={{ fontSize: 11, color: PALETTE.textMuted, marginTop: 4, lineHeight: 1.5 }}>
+              Targets are potential ranges, not guarantees. Capital at risk. Early exit returns principal only.
+            </div>
           </div>
-<div style={{
-  background: "rgba(201,168,76,0.08)",
-  border: "1px solid rgba(201,168,76,0.25)",
-  borderRadius: 12,
-  padding: 14,
-  fontSize: 12,
-  color: PALETTE.gold,
-  lineHeight: 1.7
-}}>
-  🔒 <strong>Lock period:</strong> Your principal is locked for{" "}
-  <strong>{plan?.duration || 180} days</strong> (until plan maturity).
-  You can withdraw profits only while the plan is active.
-  Full principal becomes available after completion.
-</div>
 
+          <div
+            style={{
+              background: "rgba(201,168,76,0.08)",
+              border: "1px solid rgba(201,168,76,0.25)",
+              borderRadius: 12,
+              padding: 14,
+              fontSize: 12,
+              color: PALETTE.gold,
+              lineHeight: 1.7,
+            }}
+          >
+            🔒 Lock period: Principal is locked for your chosen term ({termMonths} months). Early exit returns
+            principal only; profit and bonuses are forfeited. Monthly AI settlement applies while active.
+          </div>
         </div>
 
         {/* Right */}
         <div style={{ ...S.glassCard, padding: isMobile ? 20 : 24 }}>
-          <div style={{ fontSize: 11, color: PALETTE.textMuted, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 14 }}>Select Crypto</div>
+          <div
+            style={{
+              fontSize: 11,
+              color: PALETTE.textMuted,
+              fontWeight: 600,
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              marginBottom: 14,
+            }}
+          >
+            Select Crypto
+          </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 20 }}>
-            {CRYPTO_WALLETS.map(w => (
-              <button key={w.id} onClick={() => setSelected(w)} style={{ background: selected.id === w.id ? `rgba(0,212,170,0.1)` : "rgba(0,0,0,0.3)", border: `1.5px solid ${selected.id === w.id ? w.color : "rgba(255,255,255,0.06)"}`, borderRadius: 10, padding: "10px 12px", cursor: "pointer", display: "flex", alignItems: "center", gap: 8, transition: "all .15s" }}>
+            {CRYPTO_WALLETS.map((w) => (
+              <button
+                key={w.id}
+                onClick={() => setSelected(w)}
+                style={{
+                  background: selected.id === w.id ? "rgba(0,212,170,0.1)" : "rgba(0,0,0,0.3)",
+                  border: `1.5px solid ${selected.id === w.id ? w.color : "rgba(255,255,255,0.06)"}`,
+                  borderRadius: 10,
+                  padding: "10px 12px",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  transition: "all .15s",
+                }}
+              >
                 <span style={{ fontSize: 16, color: w.color }}>{w.icon}</span>
                 <div style={{ textAlign: "left" }}>
                   <div style={{ fontSize: 12, fontWeight: 700, color: PALETTE.text }}>{w.sym}</div>
@@ -1454,24 +1602,64 @@ if (!invData) {
               </button>
             ))}
           </div>
+
           <div style={{ fontSize: 13, color: PALETTE.textMuted, textAlign: "center", marginBottom: 10 }}>
-            Send <strong style={{ color: PALETTE.gold }}>{fmtUSD(amount)}</strong> in <strong style={{ color: selected.color }}>{selected.sym}</strong>
+            Send <strong style={{ color: PALETTE.gold }}>{fmtUSD(amount)}</strong> in{" "}
+            <strong style={{ color: selected.color }}>{selected.sym}</strong>
           </div>
-          <div style={{ fontSize: 11, color: PALETTE.textMuted, textAlign: "center", marginBottom: 14 }}>Network: {selected.network}</div>
-          <div style={{ background: "rgba(0,0,0,0.4)", borderRadius: 10, padding: "12px 14px", display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
-            <span style={{ fontFamily: "monospace", fontSize: 10, color: PALETTE.textMuted, flex: 1, wordBreak: "break-all" }}>{selected.addr}</span>
-            <button onClick={copyAddr} style={{ ...S.tealBtn, padding: "7px 12px", fontSize: 12, flexShrink: 0 }}>{copied ? "✓" : "Copy"}</button>
+          <div style={{ fontSize: 11, color: PALETTE.textMuted, textAlign: "center", marginBottom: 14 }}>
+            Network: {selected.network}
           </div>
-          <div style={{ background: "rgba(201,168,76,0.08)", border: "1px solid rgba(201,168,76,0.2)", borderRadius: 10, padding: 12, marginBottom: 18, fontSize: 12, color: PALETTE.gold, lineHeight: 1.6 }}>
+
+          <div
+            style={{
+              background: "rgba(0,0,0,0.4)",
+              borderRadius: 10,
+              padding: "12px 14px",
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              marginBottom: 14,
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "monospace",
+                fontSize: 10,
+                color: PALETTE.textMuted,
+                flex: 1,
+                wordBreak: "break-all",
+              }}
+            >
+              {selected.addr}
+            </span>
+            <button onClick={copyAddr} style={{ ...S.tealBtn, padding: "7px 12px", fontSize: 12, flexShrink: 0 }}>
+              {copied ? "✓" : "Copy"}
+            </button>
+          </div>
+
+          <div
+            style={{
+              background: "rgba(201,168,76,0.08)",
+              border: "1px solid rgba(201,168,76,0.2)",
+              borderRadius: 10,
+              padding: 12,
+              marginBottom: 18,
+              fontSize: 12,
+              color: PALETTE.gold,
+              lineHeight: 1.6,
+            }}
+          >
             ⚠️ Only send {selected.sym} on {selected.network}. Other tokens may be lost.
           </div>
-       <button 
-  onClick={handlePaymentConfirm} 
-  disabled={submitting}
-  style={{ ...S.tealBtn, width: "100%", padding: "14px 0", fontSize: 14, opacity: submitting ? 0.7 : 1 }}
->
-  {submitting ? "Processing..." : "I Have Sent the Payment →"}
-</button>
+
+          <button
+            onClick={handlePaymentConfirm}
+            disabled={submitting}
+            style={{ ...S.tealBtn, width: "100%", padding: "14px 0", fontSize: 14, opacity: submitting ? 0.7 : 1 }}
+          >
+            {submitting ? "Processing..." : "I Have Sent the Payment →"}
+          </button>
         </div>
       </div>
     </div>
