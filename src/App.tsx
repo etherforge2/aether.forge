@@ -1638,14 +1638,38 @@ function FAQPage() {
   const [open, setOpen] = useState(null);
   const isMobile = useIsMobile();
   const faqs = [
-    { q: "How do investment returns work?", a: "Returns are calculated daily at the specified rate and credited directly to your balance. You can reinvest or withdraw after the plan matures." },
-    { q: "Is my investment safe?", a: "AetherForge uses AES-256 encryption, cold storage, and multi-signature wallets. We are regulated by the FCA (UK) and MAS (Singapore) with mandatory capital reserves." },
-    { q: "How do I withdraw my funds?", a: "Go to Dashboard > Withdraw, enter the amount and wallet address. Most withdrawals process within 12–24 hours. Minimum is $50." },
-    { q: "What cryptocurrencies are accepted?", a: "We accept BTC, ETH, USDT, USDC, BNB, SOL, TRX, LTC, DOGE, BCH, and more. Select your currency on the payment page." },
-    { q: "Can I run multiple plans?", a: "Yes — run as many plans simultaneously as you like. Each operates independently with its own schedule and returns." },
-    { q: "What is the referral commission?", a: "5% on all investments made by referred users, credited to your balance automatically and instantly." },
-    { q: "Is KYC required?", a: "KYC is required for withdrawals above $5,000 to comply with AML regulations. We use Onfido for fast, encrypted verification." },
-    { q: "What is the win rate?", a: "Our AI engine maintains a 91%+ win rate with strict stop-losses and position sizing. Your principal is always protected within plan parameters." },
+    {
+      q: "How do investment returns work?",
+      a: "Each plan has a target monthly performance range. While your investment is active, performance is assessed on a monthly settlement cycle. On-site estimates use mid-range projections and are potential targets, not fixed daily guarantees. Capital is at risk.",
+    },
+    {
+      q: "Can I choose how long to invest?",
+      a: "Yes. At checkout you select a term from 3 to 24 months. Longer terms unlock higher plan tiers and higher completion-bonus eligibility. Your principal is committed for the chosen term.",
+    },
+    {
+      q: "What happens if I exit early?",
+      a: "Early exit returns your principal only. Accrued or displayed profit is forfeited, and completion or outperformance bonuses are not paid.",
+    },
+    {
+      q: "What is the completion bonus?",
+      a: "If you hold an investment to full maturity, you may receive a completion bonus on principal: +5% (3–11 months), +7% (12–17 months), or +10% (18–24 months).",
+    },
+    {
+      q: "How do withdrawals work?",
+      a: "Go to Dashboard → Withdraw. You can only withdraw available balance (total balance minus principal locked in active plans). Requests are reviewed before completion. Minimum is $50.",
+    },
+    {
+      q: "What cryptocurrencies are accepted?",
+      a: "We accept BTC, ETH, USDT, USDC, BNB, SOL, and other listed assets on the payment page. Always use the correct network shown for each wallet.",
+    },
+    {
+      q: "Can I run multiple plans?",
+      a: "Yes. You can run multiple investments at the same time. Each has its own term, target range, and schedule.",
+    },
+    {
+      q: "Is this risk-free?",
+      a: "No. Trading strategies involve risk of loss. Target monthly ranges are potential estimates under normal conditions, not guarantees. Past performance does not guarantee future results. Capital at risk.",
+    },
   ];
   return (
     <div style={{ maxWidth: 720, margin: "0 auto", padding: isMobile ? "40px 16px" : "60px 24px" }}>
