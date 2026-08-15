@@ -1656,11 +1656,14 @@ function Footer({ setPage }) {
           {[
             { title: "Platform", links: ["Home","About","Plans","Markets","Dashboard"] },
             { title: "Account", links: ["Register","Login","Affiliate","FAQ","Contact"] },
-            { title: "Legal", links: ["Privacy Policy","Terms","Risk Disclaimer","AML Policy"] },
+           { title: "Legal", links: ["Privacy Policy","Terms","Risk Disclaimer","AML Policy","Investment Policy"] },
           ].map((col, i) => (
             <div key={i}>
               <div style={{ fontWeight: 700, marginBottom: 12, fontSize: 13 }}>{col.title}</div>
-              {col.links.map(l => <div key={l} onClick={() => setPage(l.toLowerCase().replace(/ /g, ""))} style={{ color: PALETTE.textMuted, fontSize: 12, marginBottom: 9, cursor: "pointer" }}>{l}</div>)}
+              {col.links.map(l => <div key={l} onClick={() => {
+  if (l === "Investment Policy") setPage("policy");
+  else setPage(l.toLowerCase().replace(/ /g, ""));
+}} style={{ color: PALETTE.textMuted, fontSize: 12, marginBottom: 9, cursor: "pointer" }}>{l}</div>)}
             </div>
           ))}
         </div>
