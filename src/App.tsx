@@ -494,6 +494,25 @@ return (
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 40 }}>
             <div style={S.badge}>Investment Plans</div>
+
+<div style={{
+  maxWidth: 1200,
+  margin: "0 auto 28px",
+  padding: "16px",
+  background: "rgba(0,212,170,0.08)",
+  border: "1px solid rgba(0,212,170,0.2)",
+  borderRadius: 14,
+  textAlign: "center"
+}}>
+  <div style={{ fontWeight: 800, fontSize: 15, marginBottom: 6, color: PALETTE.teal }}>
+    Longer commitments now available
+  </div>
+  <div style={{ fontSize: 13, color: PALETTE.textMuted, lineHeight: 1.6 }}>
+    Choose 3 months up to 24 months. Monthly AI settlement. Completion bonus for full-term holders.
+  </div>
+</div>
+
+
             <h2 style={{ fontSize: isMobile ? 26 : 40, fontWeight: 800, letterSpacing: "-0.03em", marginTop: 12, marginBottom: 10 }}>Choose Your Path to Returns</h2>
             <div style={{ color: PALETTE.textMuted, fontSize: isMobile ? 13 : 15 }}>Monthly AI settlement · choose your term (3–24 months).</div>
           </div>
