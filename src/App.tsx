@@ -1371,9 +1371,9 @@ if (!invData) {
           <div style={{ ...S.glassCard, padding: isMobile ? 20 : 24 }}>
             <div style={{ fontSize: 11, color: PALETTE.textMuted, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 14 }}>Estimated Returns</div>
             {[
-              ["Daily Earnings", amount * (plan?.daily ?? 3.8) / 100],
-              [`Total (${plan?.duration} days)`, amount * (plan?.daily ?? 3.8) / 100 * (plan?.duration ?? 5)],
-              ["Capital + Profit", amount + amount * (plan?.daily ?? 3.8) / 100 * (plan?.duration ?? 5)],
+              ["Est. monthly (mid)", estMonthly],
+[`Est. over ${termMonths} months (mid)`, estTotal],
+[`Completion bonus if held full term (+${completionBonusPct}%)`, amount * (completionBonusPct / 100)],
             ].map(([l, v], i) => (
               <div key={i} style={{ display: "flex", justifyContent: "space-between", marginBottom: 12, paddingBottom: 12, borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.05)" : "none" }}>
                 <span style={{ color: PALETTE.textMuted, fontSize: 13 }}>{l}</span>
