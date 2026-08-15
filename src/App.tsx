@@ -495,7 +495,7 @@ return (
           <div style={{ textAlign: "center", marginBottom: 40 }}>
             <div style={S.badge}>Investment Plans</div>
             <h2 style={{ fontSize: isMobile ? 26 : 40, fontWeight: 800, letterSpacing: "-0.03em", marginTop: 12, marginBottom: 10 }}>Choose Your Path to Returns</h2>
-            <div style={{ color: PALETTE.textMuted, fontSize: isMobile ? 13 : 15 }}>Daily compounding returns. Principal protected.</div>
+            <div style={{ color: PALETTE.textMuted, fontSize: isMobile ? 13 : 15 }}>Monthly AI settlement · choose your term (3–24 months).</div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fill,minmax(260px,1fr))", gap: 16 }}>
             {PLANS.slice(0, isMobile ? 3 : 4).map(p => (
